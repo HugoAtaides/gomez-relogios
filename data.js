@@ -24,12 +24,12 @@ window.PRODUCTS = [
     compareAt: 1290.00,
     stock: 1,
     badge: 'Destaque',
-    image: 'assets/produtos/orient-1519-frente1.jpeg',
+    image: 'assets/produtos/orient-1519-frente1.jpg',
     gallery: [
-  'assets/produtos/orient-1519-frente2.jpeg',
-  'assets/produtos/orient-1519-frente3.jpeg',
-  'assets/produtos/orient-1519-frente4.jpeg',
-  'assets/produtos/orient-1519-frente5.jpeg'
+  'assets/produtos/orient-1519-frente2.jpg',
+  'assets/produtos/orient-1519-frente3.jpg',
+  'assets/produtos/orient-1519-frente4.jpg',
+  'assets/produtos/orient-1519-frente5.jpg'
 ],
     description: 'Relógio Orient com tecnologia Solartech e proposta esportiva elegante, pensado para quem quer praticidade sem abrir mão de presença.',
     specs: {
