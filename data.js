@@ -51,8 +51,14 @@ window.PRODUCTS = [
     compareAt: 1099.00,
     stock: 1,
     badge: '',
-    image: 'assets/produtos/orient-mgss1269-g1kx.jpg',
-    gallery: ['assets/produtos/orient-mgss1269-g1kx.jpg'],
+    image: 'assets/produtos/orient-1269-frente1.jpg',
+    gallery: [
+  'assets/produtos/orient-1269-frente2.jpg',
+  'assets/produtos/orient-1269-frente3.jpg',
+  'assets/produtos/orient-1269-frente4.jpg',
+  'assets/produtos/orient-1269-frente5.jpg',
+  'assets/produtos/orient-1269-frente6.jpg'
+],
     description: 'Design clássico Orient para composições sociais e uso cotidiano.',
     specs: {
       'Marca': 'Orient',
