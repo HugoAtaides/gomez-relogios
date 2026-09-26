@@ -24,9 +24,9 @@ window.PRODUCTS = [
     compareAt: 1298.00,
     stock: 1,
     badge: 'Destaque',
-    image: 'assets/produtos/orient-1519-frente1.jpg',
+    image: 'assets/produtos/orient-1519-frente2.jpg',
     gallery: [
-  'assets/produtos/orient-1519-frente2.jpg',
+  'assets/produtos/orient-1519-frente1.jpg',
   'assets/produtos/orient-1519-frente3.jpg',
   'assets/produtos/orient-1519-frente4.jpg',
   'assets/produtos/orient-1519-frente5.jpg'
