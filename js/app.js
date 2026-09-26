@@ -87,8 +87,40 @@
     }
   };
 
+  function initFloatingWhatsApp() {
+    if (!CONFIG || !CONFIG.whatsapp) return;
+    if (document.getElementById('floatingWhatsapp')) return;
+
+    const link = document.createElement('a');
+    link.id = 'floatingWhatsapp';
+    link.className = 'floating-whatsapp';
+    const whatsappConfigured = CONFIG.whatsapp !== '5561999999999';
+    link.href = whatsappConfigured
+      ? Gomez.whatsappUrl('Olá, Gomez Relógios! Gostaria de conhecer os relógios disponíveis.')
+      : '#';
+    if (whatsappConfigured) {
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+    } else {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        alert('Configure o número do WhatsApp da Gomez Relógios no arquivo data.js antes de publicar a loja.');
+      });
+    }
+    link.setAttribute('aria-label', 'Falar com a Gomez Relógios pelo WhatsApp');
+    link.title = whatsappConfigured ? 'Fale conosco pelo WhatsApp' : 'Configure o WhatsApp no data.js';
+    link.innerHTML = `
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path d="M19.11 17.08c-.27-.14-1.59-.78-1.84-.87-.25-.09-.43-.14-.61.14-.18.27-.7.87-.86 1.05-.16.18-.32.2-.59.07-.27-.14-1.15-.42-2.2-1.35-.81-.72-1.35-1.61-1.51-1.88-.16-.27-.02-.42.12-.56.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.01-.22-.53-.44-.46-.61-.47h-.52c-.18 0-.48.07-.73.34-.25.27-.95.93-.95 2.26s.98 2.62 1.11 2.8c.14.18 1.93 2.95 4.67 4.14.65.28 1.16.45 1.56.57.65.21 1.24.18 1.7.11.52-.08 1.59-.65 1.81-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.32ZM16.02 3A12.99 12.99 0 0 0 4.9 22.72L3 29l6.45-1.85A13 13 0 1 0 16.02 3Zm0 23.65c-2.07 0-4.1-.56-5.88-1.63l-.42-.25-3.83 1.1 1.11-3.73-.27-.43a10.94 10.94 0 1 1 9.29 4.94Z"/>
+      </svg>
+      <span>WhatsApp</span>
+    `;
+    document.body.appendChild(link);
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     Gomez.updateCartCount();
+    initFloatingWhatsApp();
     document.querySelectorAll('img').forEach(img => img.addEventListener('error', () => Gomez.imageFallback(img), { once: true }));
 
     const year = document.querySelector('[data-year]');
