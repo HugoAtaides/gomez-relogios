@@ -1,0 +1,29 @@
+GOMEZ RELÓGIOS — CONFIGURAÇÃO RÁPIDA
+
+1) DATA.JS
+- whatsapp = seu número de WhatsApp (somente números, com 55)
+- originCep = CEP real de postagem
+- PRODUCTS = catálogo, preços, estoque e fotos
+
+2) FOTOS
+Coloque as fotos na pasta:
+assets/produtos/
+
+3) CLOUDFLARE
+Crie o projeto Pages ligado ao GitHub.
+Build command: exit 0
+Build output directory: .
+
+4) SECRETS / VARIABLES
+MELHOR_ENVIO_TOKEN = access token do Melhor Envio
+MELHOR_ENVIO_USER_AGENT = Gomez Relógios (seu e-mail)
+GOMEZ_ORIGIN_CEP = CEP de postagem
+MP_ACCESS_TOKEN = Access Token de produção do Mercado Pago
+
+5) PREÇOS
+Sempre que mudar um preço em data.js, mude o mesmo preço em:
+functions/checkout.js
+
+6) ATENÇÃO
+Nunca coloque MP_ACCESS_TOKEN ou MELHOR_ENVIO_TOKEN dentro de data.js.
+As páginas de privacidade e trocas/devoluções são modelos e devem ser revisadas antes da publicação.

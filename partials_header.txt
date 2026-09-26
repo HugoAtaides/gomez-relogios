@@ -1,0 +1,18 @@
+<div class="topbar">CURADORIA · PROCEDÊNCIA · ATENDIMENTO EM BRASÍLIA–DF</div>
+<header class="header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html"><img src="assets/logo-gomez.png" alt="Gomez Relógios"></a>
+    <nav class="nav" aria-label="Principal">
+      <a href="index.html">Home</a>
+      <a href="produtos.html">Relógios</a>
+      <a href="quem-somos.html">Quem somos</a>
+      <a href="como-comprar.html">Como comprar</a>
+      <a href="trocas-e-devolucoes.html">Trocas e devoluções</a>
+      <a href="perguntas-frequentes.html">FAQ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn mobile-menu" data-mobile-menu aria-label="Abrir menu">☰</button>
+      <a class="icon-btn" href="carrinho.html" aria-label="Carrinho">🛒<span class="cart-count" data-cart-count>0</span></a>
+    </div>
+  </div>
+</header>

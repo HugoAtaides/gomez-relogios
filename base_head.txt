@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#151515">
+  <title>Gomez Relógios</title>
+  <meta name="description" content="Gomez Relógios — relógios selecionados, compra online e atendimento em Brasília-DF.">
+  <link rel="icon" href="assets/logo-gomez.png">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="data.js" defer></script>
+  <script src="js/app.js" defer></script>
