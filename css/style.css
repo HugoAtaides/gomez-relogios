@@ -851,80 +851,147 @@ footer h4{
 /* Celular */
 @media (max-width:760px){
 
+  /* ========================================
+     CABEÇALHO MOBILE
+     Menu à esquerda
+     Logo centralizada
+     Carrinho à direita
+     ======================================== */
+
   .header-inner{
-    grid-template-columns:auto auto;
-    justify-content:space-between
+    position:relative;
+    display:grid;
+    grid-template-columns:44px 1fr 44px;
+    align-items:center;
+    justify-content:initial;
+    gap:0;
+    min-height:78px;
   }
 
-  .nav{
-    display:none
-  }
-
-  .mobile-menu{
-    display:block
+  /* Logo exatamente no centro da tela */
+  .brand{
+    grid-column:2;
+    grid-row:1;
+    justify-self:center;
+    z-index:2;
   }
 
   .brand img{
-    width:128px
+    width:128px;
+    height:auto;
+  }
+
+  /* Faz os dois botões ocuparem suas próprias posições */
+  .header-actions{
+    display:contents;
+  }
+
+  /* Menu ☰ à esquerda */
+  .mobile-menu{
+    display:grid;
+    grid-column:1;
+    grid-row:1;
+    justify-self:start;
+    z-index:3;
+  }
+
+  /* Carrinho 🛒 à direita */
+  .header-actions > .icon-btn:not(.mobile-menu){
+    grid-column:3;
+    grid-row:1;
+    justify-self:end;
+    z-index:3;
+  }
+
+  /* Menu de páginas aberto */
+  .nav{
+    display:none;
+    position:absolute;
+    top:78px;
+    left:0;
+    right:0;
+    background:#fbfaf7;
+    flex-direction:column;
+    gap:0;
+    padding:18px 5%;
+    border-bottom:1px solid #e7e2d8;
+    box-shadow:0 12px 24px rgba(0,0,0,.08);
+    z-index:10;
+  }
+
+  .nav a{
+    display:block;
+    width:100%;
+    padding:14px 0;
+    border-bottom:1px solid #e7e2d8;
+  }
+
+  .nav a:last-child{
+    border-bottom:0;
+  }
+
+  /* Mantém o menu funcionando quando aberto pelo JavaScript */
+  .nav[style*="display: flex"]{
+    display:flex !important;
   }
 
   .hero{
-    padding-top:34px
+    padding-top:34px;
   }
 
   .features{
-    grid-template-columns:1fr
+    grid-template-columns:1fr;
   }
 
   .product-grid{
-    grid-template-columns:repeat(2,1fr)
+    grid-template-columns:repeat(2,1fr);
   }
 
   .filters{
-    grid-template-columns:1fr 1fr
+    grid-template-columns:1fr 1fr;
   }
 
   .filters .full{
-    grid-column:1/-1
+    grid-column:1/-1;
   }
 
   .footer-grid{
-    grid-template-columns:1fr
+    grid-template-columns:1fr;
   }
 
   .footer-bottom{
-    flex-direction:column
+    flex-direction:column;
   }
 
   .cart-item{
-    grid-template-columns:70px 1fr
+    grid-template-columns:70px 1fr;
   }
 
   .cart-item > :last-child{
-    grid-column:2
+    grid-column:2;
   }
 
   .cart-item img{
     width:70px;
-    height:70px
+    height:70px;
   }
 
   .form-grid{
-    grid-template-columns:1fr
+    grid-template-columns:1fr;
   }
 
   .form-grid .full{
-    grid-column:auto
+    grid-column:auto;
   }
 
-  /* Mantém a proporção 3:4 no celular */
+  /* Visualizador de fotos 1200x1600 */
   .gallery-main{
-    aspect-ratio:3/4
+    aspect-ratio:3/4;
   }
 
   .thumb{
     width:62px;
-    height:83px
+    height:83px;
   }
 }
 
@@ -932,29 +999,34 @@ footer h4{
 @media (max-width:480px){
 
   .product-grid{
-    grid-template-columns:1fr
+    grid-template-columns:1fr;
   }
 
   .filters{
-    grid-template-columns:1fr
+    grid-template-columns:1fr;
   }
 
   .section{
-    padding:52px 0
+    padding:52px 0;
   }
 
   .header-inner{
-    min-height:78px
+    min-height:78px;
+  }
+
+  .brand img{
+    width:118px;
   }
 
   .btns{
-    display:grid
+    display:grid;
   }
 
   .btn{
-    width:100%
+    width:100%;
   }
 
+  /* WhatsApp flutuante */
   .floating-whatsapp{
     right:14px;
     bottom:14px;
@@ -962,29 +1034,25 @@ footer h4{
     min-height:54px;
     height:54px;
     padding:0;
-    justify-content:center
+    justify-content:center;
   }
 
   .floating-whatsapp span{
-    display:none
+    display:none;
   }
 
+  /* Galeria vertical para fotos 1200x1600 */
   .gallery{
-    padding:10px
+    padding:10px;
   }
 
   .gallery-main{
     aspect-ratio:3/4;
-    border-radius:12px
+    border-radius:12px;
   }
 
   .thumb{
     width:58px;
-    height:77px
+    height:77px;
   }
-  
-/* Remove a logo do rodapé */
-.footer-logo{
-  display:none !important;
-}
 }
