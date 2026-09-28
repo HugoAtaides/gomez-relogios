@@ -1057,8 +1057,13 @@ footer h4{
   }
 
   /* Remove a logo do rodapé */
-.footer-img{
-  display:none !important;
-  }
+/* ========================================
+   REMOVER LOGO DO RODAPÉ
+   ======================================== */
+
+footer img,
+.footer-logo {
+  display: none !important;
+}
 
 }
