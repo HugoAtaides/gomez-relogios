@@ -1055,4 +1055,12 @@ footer h4{
     width:58px;
     height:77px;
   }
+  /* ========================================
+   REMOVER LOGO DO RODAPÉ
+   ======================================== */
+
+footer img,
+.footer-logo {
+  display: none !important;
+}
 }
