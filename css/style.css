@@ -1059,5 +1059,6 @@ footer h4{
   /* Remove a logo do rodapé */
 .footer-logo{
   display:none !important;
-}
+  }
+
 }
