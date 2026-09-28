@@ -983,3 +983,8 @@ footer h4{
     height:77px
   }
 }
+
+/* Remove a logo do rodapé */
+.footer-logo{
+  display:none !important;
+}
