@@ -3,13 +3,18 @@
 
 window.GOMEZ_CONFIG = {
   storeName: 'Gomez Relógios',
-  whatsapp: '5561999490969', // TROQUE pelo WhatsApp da Gomez, somente números, com DDI 55.
-  originCep: '71725207',      // TROQUE pelo CEP de postagem da Gomez.
+  whatsapp: '5561999999999', // TROQUE pelo WhatsApp da Gomez, somente números, com DDI 55.
+  originCep: '70000000',      // TROQUE pelo CEP de postagem da Gomez.
   city: 'Brasília - DF',
   currency: 'BRL',
   shippingEnabled: true,
   mercadoPagoEnabled: true,
-  freeShippingThreshold: 0 // Ex.: 1500. Use 0 para desativar.
+  freeShippingThreshold: 0, // Ex.: 1500. Use 0 para desativar.
+
+  // SUPABASE — dados públicos do projeto; nunca coloque a chave secreta aqui.
+  // Cole aqui a URL do seu projeto e a Publishable Key do Supabase.
+  supabaseUrl: 'https://pdllxurhmesadtuiisfr.supabase.co',
+  supabasePublishableKey: 'sb_publishable_Qd19DT_a5lmtaYJs96BFOg_VepGGuHA'
 };
 
 // Preços abaixo são exemplos editáveis.
@@ -20,45 +25,34 @@ window.PRODUCTS = [
     brand: 'Orient',
     name: 'Solartech Elite Sea MBSS 1519 G1SX',
     category: 'Solar',
-    price: 1198.00,
-    compareAt: 1298.00,
+    price: 1190.00,
+    compareAt: 1290.00,
     stock: 1,
     badge: 'Destaque',
-    image: 'assets/produtos/orient-1519-frente2.jpg',
-    gallery: [
-  'assets/produtos/orient-1519-frente1.jpg',
-  'assets/produtos/orient-1519-frente3.jpg',
-  'assets/produtos/orient-1519-frente4.jpg',
-  'assets/produtos/orient-1519-frente5.jpg'
-],
+    image: 'assets/produtos/orient-mbss-1519-g1sx.jpg',
+    gallery: ['assets/produtos/orient-mbss-1519-g1sx.jpg'],
     description: 'Relógio Orient com tecnologia Solartech e proposta esportiva elegante, pensado para quem quer praticidade sem abrir mão de presença.',
     specs: {
       'Marca': 'Orient',
       'Modelo': 'MBSS 1519 G1SX',
       'Tecnologia': 'Solartech',
       'Movimento': 'Quartzo solar',
-      'Resistência à água': '100 metros',
-      'Garantia': '90 dias, conforme Código de Defesa do Consumidor, e 1 ano, se acionada a garantia do fabricante.'
+      'Resistência à água': 'Consulte a ficha do fabricante',
+      'Garantia': 'Garantia conforme condições do produto'
     },
     shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
   },
   {
     id: 'orient-mgss1269-g1kx',
     brand: 'Orient',
-    name: 'Orient Eternal MGSS1269 G1KX',
+    name: 'Orient MGSS1269 G1KX',
     category: 'Clássico',
     price: 899.00,
-    compareAt: 1099.00,
+    compareAt: null,
     stock: 1,
     badge: '',
-    image: 'assets/produtos/orient-1269-frente1.jpg',
-    gallery: [
-  'assets/produtos/orient-1269-frente2.jpg',
-  'assets/produtos/orient-1269-frente3.jpg',
-  'assets/produtos/orient-1269-frente4.jpg',
-  'assets/produtos/orient-1269-frente5.jpg',
-  'assets/produtos/orient-1269-frente6.jpg'
-],
+    image: 'assets/produtos/orient-mgss1269-g1kx.jpg',
+    gallery: ['assets/produtos/orient-mgss1269-g1kx.jpg'],
     description: 'Design clássico Orient para composições sociais e uso cotidiano.',
     specs: {
       'Marca': 'Orient',
@@ -67,8 +61,69 @@ window.PRODUCTS = [
       'Garantia': 'Garantia conforme condições do produto'
     },
     shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
+  },
+  {
+    id: 'orient-c288-d1sx',
+    brand: 'Orient',
+    name: 'Solartech Elite Sea MBSS C288 D1SX',
+    category: 'Solar',
+    price: 1390.00,
+    compareAt: 1490.00,
+    stock: 1,
+    badge: 'Solartech',
+    image: 'assets/produtos/orient-c288-d1sx.jpg',
+    gallery: ['assets/produtos/orient-c288-d1sx.jpg'],
+    description: 'Modelo Solartech com visual marcante e proposta esportiva.',
+    specs: {
+      'Marca': 'Orient',
+      'Modelo': 'MBSS C288 D1SX',
+      'Tecnologia': 'Solartech',
+      'Movimento': 'Quartzo solar',
+      'Garantia': 'Garantia conforme condições do produto'
+    },
+    shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
+  },
+  {
+    id: 'orient-eternal-mgss1258',
+    brand: 'Orient',
+    name: 'Orient Eternal MGSS 1258',
+    category: 'Clássico',
+    price: 799.00,
+    compareAt: null,
+    stock: 1,
+    badge: '',
+    image: 'assets/produtos/orient-eternal-mgss1258.jpg',
+    gallery: ['assets/produtos/orient-eternal-mgss1258.jpg'],
+    description: 'Relógio Orient de estética clássica e versátil.',
+    specs: {
+      'Marca': 'Orient',
+      'Modelo': 'MGSS 1258',
+      'Movimento': 'Quartzo',
+      'Garantia': 'Garantia conforme condições do produto'
+    },
+    shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
+  },
+  {
+    id: 'technos-golf-2115udk',
+    brand: 'Technos',
+    name: 'Technos Golf 2115UDK',
+    category: 'Esportivo',
+    price: 566.00,
+    compareAt: null,
+    stock: 1,
+    badge: 'Oportunidade',
+    image: 'assets/produtos/technos-golf-2115udk.jpg',
+    gallery: ['assets/produtos/technos-golf-2115udk.jpg'],
+    description: 'Technos Golf com perfil esportivo e visual contemporâneo.',
+    specs: {
+      'Marca': 'Technos',
+      'Modelo': 'Golf 2115UDK',
+      'Movimento': 'Quartzo',
+      'Garantia': 'Garantia conforme condições do produto'
+    },
+    shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
   }
-  ];
+];
 
 window.getProduct = function (id) {
   return window.PRODUCTS.find(p => p.id === id);
