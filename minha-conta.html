@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#151515">
+  <title>Minha conta | Gomez Relógios</title>
+  <link rel="icon" href="assets/logo-gomez.png">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="data.js" defer></script>
+  <script src="js/app.js" defer></script>
+  <script src="js/auth.js" defer></script>
+</head>
+<body>
+  <div class="topbar">GOMEZ RELÓGIOS · MINHA CONTA</div>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html"><img src="assets/logo-gomez.png" alt="Gomez Relógios"></a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="produtos.html">Relógios</a>
+        <a href="quem-somos.html">Quem somos</a>
+        <a href="como-comprar.html">Como comprar</a>
+        <a href="trocas-e-devolucoes.html">Trocas e devoluções</a>
+        <a href="perguntas-frequentes.html">FAQ</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn mobile-menu" data-mobile-menu aria-label="Abrir menu">☰</button>
+        <a class="icon-btn" href="carrinho.html" aria-label="Carrinho">🛒<span class="cart-count" data-cart-count>0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="eyebrow">Minha conta</div>
+        <h1>Meus pedidos</h1>
+        <p>Acompanhe seus pedidos realizados pelo site e consulte o status do pagamento.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div id="accountRoot"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div><p>Relógios selecionados, atendimento próximo e compra com segurança.</p><p>Brasília – DF</p></div>
+        <div><h4>Navegação</h4><p><a href="index.html">Home</a></p><p><a href="produtos.html">Relógios</a></p><p><a href="quem-somos.html">Quem somos</a></p><p><a href="como-comprar.html">Como comprar</a></p></div>
+        <div><h4>Atendimento</h4><p><a href="trocas-e-devolucoes.html">Trocas e devoluções</a></p><p><a href="perguntas-frequentes.html">Perguntas frequentes</a></p><p><a href="carrinho.html">Carrinho</a></p><p><a href="minha-conta.html">Minha conta</a></p><p><a id="footerWhatsapp" target="_blank" rel="noopener">WhatsApp</a></p></div>
+        <div><h4>Legal</h4><p><a href="politica-de-privacidade.html">Política de privacidade</a></p></div>
+      </div>
+      <div class="footer-bottom"><span>© <span data-year></span> Gomez Relógios. Todos os direitos reservados.</span><span>Brasília – DF</span></div>
+    </div>
+  </footer>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const root = document.querySelector('#accountRoot');
+    const renderMessage = (html) => { root.innerHTML = html; };
+
+    try{
+      await GomezAuth.ready;
+      if(!GomezAuth.isConfigured()){
+        renderMessage('<div class="notice">Configure o Supabase no arquivo <strong>data.js</strong> para ativar a área Minha conta.</div>');
+        return;
+      }
+
+      const session = await GomezAuth.getSession();
+      if(!session){
+        window.location.href = `login.html?next=${encodeURIComponent('minha-conta.html')}`;
+        return;
+      }
+
+      const supabase = await GomezAuth.getClient();
+      const user = session.user;
+      const name = user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'Cliente Gomez';
+
+      const { data: orders, error } = await supabase
+        .from('orders')
+        .select('id,order_code,customer_name,customer_email,status,payment_status,fulfillment_status,order_items,subtotal,shipping_cost,shipping_name,shipping_deadline,total,mp_payment_id,tracking_code,created_at,updated_at')
+        .order('created_at', { ascending:false });
+
+      if(error) throw error;
+
+      const labels = {
+        awaiting_payment: 'Aguardando pagamento',
+        pending_payment: 'Pagamento pendente',
+        paid: 'Pagamento aprovado',
+        rejected: 'Pagamento recusado',
+        refunded: 'Pagamento estornado',
+        cancelled: 'Pedido cancelado',
+        processing: 'Em preparação',
+        shipped: 'Enviado',
+        delivered: 'Entregue'
+      };
+
+      const fulfillmentLabels = {
+        not_started: 'Aguardando preparação',
+        processing: 'Em preparação',
+        shipped: 'Enviado',
+        delivered: 'Entregue'
+      };
+
+      const statusClass = (status='') => `order-status order-status-${Gomez.escape(status)}`;
+      const money = value => Gomez.money(Number(value || 0));
+      const formatDate = value => new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'short'}).format(new Date(value));
+
+      root.innerHTML = `
+        <div class="account-head">
+          <div>
+            <div class="eyebrow">Olá, ${Gomez.escape(name)}</div>
+            <h2>Seus pedidos</h2>
+            <p class="small">${Gomez.escape(user.email || 'Conta autenticada')}</p>
+          </div>
+          <button class="btn btn-ghost" id="logoutBtn">Sair da conta</button>
+        </div>
+
+        ${orders?.length ? `
+          <div class="orders-list">
+            ${orders.map(order => `
+              <article class="order-card">
+                <div class="order-card-head">
+                  <div>
+                    <div class="order-number">Pedido ${Gomez.escape(order.order_code)}</div>
+                    <div class="small">Realizado em ${formatDate(order.created_at)}</div>
+                  </div>
+                  <span class="${statusClass(order.status)}">${Gomez.escape(labels[order.status] || order.status)}</span>
+                </div>
+
+                <div class="order-items">
+                  ${(Array.isArray(order.order_items) ? order.order_items : []).map(item => `
+                    <div class="order-item-line">
+                      <span>${Gomez.escape(item.title)} × ${Number(item.quantity || 1)}</span>
+                      <strong>${money(Number(item.unit_price || 0) * Number(item.quantity || 1))}</strong>
+                    </div>
+                  `).join('')}
+                </div>
+
+                <div class="order-meta-grid">
+                  <div><span>Subtotal</span><strong>${money(order.subtotal)}</strong></div>
+                  <div><span>Frete</span><strong>${money(order.shipping_cost)}</strong></div>
+                  <div><span>Total</span><strong>${money(order.total)}</strong></div>
+                  <div><span>Entrega</span><strong>${Gomez.escape(fulfillmentLabels[order.fulfillment_status] || order.fulfillment_status || 'Aguardando')}</strong></div>
+                </div>
+
+                ${order.shipping_name ? `<p class="small">Envio: <strong>${Gomez.escape(order.shipping_name)}</strong>${order.shipping_deadline ? ` · prazo estimado: ${Number(order.shipping_deadline)} dias` : ''}</p>` : ''}
+                ${order.tracking_code ? `<p class="small">Código de rastreio: <strong>${Gomez.escape(order.tracking_code)}</strong></p>` : ''}
+              </article>
+            `).join('')}
+          </div>
+        ` : `
+          <div class="empty">
+            <h2>Você ainda não fez pedidos</h2>
+            <p>Quando concluir uma compra pelo site, ela aparecerá aqui.</p>
+            <a class="btn btn-primary" href="produtos.html">Ver relógios</a>
+          </div>
+        `}
+      `;
+
+      document.querySelector('#logoutBtn')?.addEventListener('click', async () => {
+        await GomezAuth.signOut();
+        window.location.href = 'index.html';
+      });
+    }catch(error){
+      renderMessage(`<div class="notice">${Gomez.escape(error.message || 'Não foi possível carregar seus pedidos.')}</div>`);
+    }
+  });
+  </script>
+</body>
+</html>
