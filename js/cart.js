@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    out.innerHTML='<div class="small">Consultando opções de frete...</div>';
+    out.innerHTML='<div class="small">Calculando frete com o Melhor Envio...</div>';
 
     try{
       const r=await fetch('/api/shipping',{
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const options=data.options||[];
 
       out.innerHTML=options.length
-        ? options.map((o,idx)=>`<button class="shipping-option" data-ship-index="${idx}" style="text-align:left"><span><strong>${Gomez.escape(o.name)}</strong><br><small>${o.delivery_time?`Prazo estimado: ${o.delivery_time} dias`:''}</small></span><strong>${Gomez.money(Number(o.price))}</strong></button>`).join('')
+        ? options.map((o,idx)=>`<button class="shipping-option" data-ship-index="${idx}" style="text-align:left"><span><strong>${Gomez.escape(o.name)}</strong><br><small>${o.company ? Gomez.escape(o.company) : ''}${o.delivery_time ? ` · Prazo estimado: ${o.delivery_time} dias` : ''}</small></span><strong>${Gomez.money(Number(o.price))}</strong></button>`).join('')
         : '<div class="notice">Nenhuma opção encontrada para este CEP.</div>';
 
       out.querySelectorAll('[data-ship-index]').forEach(btn=>btn.addEventListener('click',()=>{
