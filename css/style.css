@@ -211,24 +211,6 @@ footer h4{margin:0 0 10px;font-size:12px;letter-spacing:.14em;text-transform:upp
   min-height:52px
 }
 
-.auth-divider{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin:24px 0;
-  color:#999;
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:.14em
-}
-
-.auth-divider:before,
-.auth-divider:after{
-  content:"";
-  height:1px;
-  background:var(--line);
-  flex:1
-}
 
 .account-head{
   display:flex;
@@ -367,4 +349,26 @@ footer h4{margin:0 0 10px;font-size:12px;letter-spacing:.14em;text-transform:upp
 footer .footer-logo,
 footer img{
   display:none !important;
+}
+
+/* Login social — somente Google */
+.google-login-button{
+  position:relative;
+  justify-content:center;
+  gap:10px;
+}
+.google-mark{
+  display:inline-flex;
+  width:22px;
+  height:22px;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  border-radius:50%;
+  flex:0 0 22px;
+}
+.google-mark svg{
+  width:18px;
+  height:18px;
+  display:block;
 }
