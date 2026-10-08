@@ -159,7 +159,6 @@ footer h4{margin:0 0 10px;font-size:12px;letter-spacing:.14em;text-transform:upp
 @media (max-width:1020px){
   .header-inner{grid-template-columns:140px 1fr auto}.nav{gap:14px}.product-grid{grid-template-columns:repeat(3,1fr)}.hero-grid,.product-detail,.cart-layout{grid-template-columns:1fr}.gallery{position:static}.summary{position:static}.footer-grid{grid-template-columns:1fr 1fr}
 }
-@media (max-width:760px){
   @media (max-width:760px){
   .header-inner{
     position:relative;
