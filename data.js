@@ -25,7 +25,7 @@ window.PRODUCTS = [
     brand: 'Orient',
     name: 'Solartech Elite Sea MBSS 1519 G1SX',
     category: 'Solar',
-    price: 1190.00,
+    price: 1.00,
     compareAt: 1290.00,
     stock: 1,
     badge: 'Destaque',
