@@ -1,3 +1,30 @@
+async function ensureGomezAuth(){
+  if(window.GomezAuth) return window.GomezAuth;
+
+  await new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[data-gomez-auth-loader]');
+    if(existing){
+      existing.addEventListener('load', resolve, { once:true });
+      existing.addEventListener('error', () => reject(new Error('Não foi possível carregar o módulo de login da Gomez.')), { once:true });
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'js/auth.js';
+    script.async = false;
+    script.dataset.gomezAuthLoader = '1';
+    script.onload = resolve;
+    script.onerror = () => reject(new Error('Não foi possível carregar o módulo de login da Gomez.'));
+    document.head.appendChild(script);
+  });
+
+  if(!window.GomezAuth){
+    throw new Error('O módulo de autenticação da Gomez não foi carregado.');
+  }
+
+  return window.GomezAuth;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.querySelector('#cartRoot');
   if (!root) return;
@@ -138,7 +165,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try{
-      const session = await GomezAuth.getSession();
+      const auth = await ensureGomezAuth();
+      await auth.ready;
+      const session = await auth.getSession();
       if(!session){
         const next = 'carrinho.html?checkout=1';
         window.location.href = `login.html?next=${encodeURIComponent(next)}`;
@@ -153,7 +182,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.textContent='Abrindo pagamento...';
 
     try{
-      const session = await GomezAuth.getSession();
+      const auth = await ensureGomezAuth();
+      await auth.ready;
+      const session = await auth.getSession();
       const token = session?.access_token;
       if(!token) throw new Error('Sessão inválida. Entre novamente para continuar.');
 
@@ -191,8 +222,9 @@ document.addEventListener('DOMContentLoaded', () => {
   async function autoCheckout(){
     if(new URLSearchParams(location.search).get('checkout')!=='1') return;
     try{
-      await GomezAuth.ready;
-      const session = await GomezAuth.getSession();
+      const auth = await ensureGomezAuth();
+      await auth.ready;
+      const session = await auth.getSession();
       if(session) setTimeout(()=>document.querySelector('#checkoutBtn')?.click(),250);
     }catch{}
   }
