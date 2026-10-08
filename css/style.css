@@ -174,10 +174,12 @@ footer h4{margin:0 0 10px;font-size:12px;letter-spacing:.14em;text-transform:upp
     transform:translateX(-50%);
   }
 
-  .brand img{
-    width:75px;
-    height:auto;
-  }
+.brand img{
+  width:100px !important;
+  max-width:100px !important;
+  height:auto !important;
+  display:block;
+}
 
   .header-actions{
     width:100%;
