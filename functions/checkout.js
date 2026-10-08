@@ -81,7 +81,7 @@ async function supabaseDelete({ supabaseUrl, secretKey, table, column, value }){
 }
 
 const catalog = {
-  'orient-mbss-1519-g1sx': { title:'Orient Solartech Elite Sea MBSS 1519 G1SX', price:1190.00 },
+  'orient-mbss-1519-g1sx': { title:'Orient Solartech Elite Sea MBSS 1519 G1SX', price:1.00 },
   'orient-mgss1269-g1kx': { title:'Orient MGSS1269 G1KX', price:899.00 },
   'orient-c288-d1sx': { title:'Orient Solartech Elite Sea MBSS C288 D1SX', price:1390.00 },
   'orient-eternal-mgss1258': { title:'Orient Eternal MGSS 1258', price:799.00 },
