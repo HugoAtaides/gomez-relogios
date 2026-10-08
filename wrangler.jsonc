@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+
+  "name": "gomez-relogios",
+
+  "main": "./src/index.js",
+
+  "compatibility_date": "2026-10-08",
+
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*"
+    ]
+  }
+}
