@@ -175,7 +175,8 @@ footer h4{margin:0 0 10px;font-size:12px;letter-spacing:.14em;text-transform:upp
   }
 
   .brand img{
-    width:128px;
+    width:100px;
+    height:auto;
   }
 
   .header-actions{
