@@ -13,9 +13,10 @@
     "run_worker_first": [
       "/api/*"
     ]
-  "vars": {
-   "GOMEZ_ORIGIN_CEP": "71725207",
-    "MELHOR_ENVIO_USER_AGENT": "Gomez Relógios (hugoataidesgomes@gmail.com)"
   },
+
+  "vars": {
+    "GOMEZ_ORIGIN_CEP": "71725207",
+    "MELHOR_ENVIO_USER_AGENT": "Gomez Relógios (hugoataidesgomes@gmail.com)"
   }
 }
