@@ -65,97 +65,114 @@
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
   const message = document.querySelector('#authMessage');
-  const queryNext = new URLSearchParams(location.search).get('next');
-
-  try {
-    if (!window.GomezAuth) {
-      throw new Error('O módulo de autenticação da Gomez não foi carregado. Recarregue a página.');
-    }
-
-    await window.GomezAuth.ready;
-
-    const storedNext = window.GomezAuth.consumeNext('minha-conta.html');
-    const next = queryNext || storedNext;
-
-    function showError(text){
-      message.textContent = text;
-      message.style.display = 'block';
-    }
-
-    if(!window.GomezAuth.isConfigured()){
-      showError('O login ainda não está configurado. Cadastre o endereço e a chave pública do Supabase no arquivo data.js.');
-      return;
-    }
-
-    const session = await window.GomezAuth.getSession();
-
-    if(session){
-      const destination = next || 'minha-conta.html';
-      window.location.href = destination;
-      return;
-    }
-
-    document.querySelectorAll('[data-provider]').forEach(button => {
-      button.addEventListener('click', async () => {
-        button.disabled = true;
-        const original = button.textContent;
-        button.textContent = 'Abrindo…';
-
-        try {
-          await window.GomezAuth.signIn(
-            button.dataset.provider,
-            next || 'minha-conta.html'
-          );
-        } catch(error) {
-          showError(error.message || 'Não foi possível iniciar o login.');
-          button.disabled = false;
-          button.textContent = original;
-        }
-      });
-    });
-
-  } catch(error) {
-    message.textContent = error.message || 'Não foi possível inicializar o login.';
-    message.style.display = 'block';
-  }
-});
 
   function showError(text){
     message.textContent = text;
     message.style.display = 'block';
   }
 
-  try{
-    await GomezAuth.ready;
-    if(!GomezAuth.isConfigured()){
-      showError('O login ainda não está configurado. Cadastre o endereço e a chave pública do Supabase no arquivo data.js.');
+  try {
+    /*
+     * Aguarda o auth.js ser carregado.
+     * O arquivo é carregado com defer no <head>.
+     */
+    if (!window.GomezAuth) {
+      await new Promise((resolve, reject) => {
+        const existing = document.querySelector('script[src="js/auth.js"]');
+
+        if (!existing) {
+          reject(new Error('O arquivo de autenticação da Gomez não foi encontrado.'));
+          return;
+        }
+
+        existing.addEventListener('load', resolve, { once: true });
+        existing.addEventListener('error', () => {
+          reject(new Error('Não foi possível carregar o módulo de autenticação da Gomez.'));
+        }, { once: true });
+      });
+    }
+
+    if (!window.GomezAuth) {
+      throw new Error('GomezAuth não foi carregado. Verifique o arquivo js/auth.js.');
+    }
+
+    await window.GomezAuth.ready;
+
+    const queryNext =
+      new URLSearchParams(window.location.search).get('next');
+
+    const storedNext =
+      window.GomezAuth.consumeNext('minha-conta.html');
+
+    const next =
+      queryNext || storedNext;
+
+    if (!window.GomezAuth.isConfigured()) {
+      showError(
+        'O login ainda não está configurado. Cadastre o endereço e a chave pública do Supabase no arquivo data.js.'
+      );
       return;
     }
 
-    const session = await GomezAuth.getSession();
-    if(session){
-      const destination = next || 'minha-conta.html';
-      window.location.href = destination;
+    const session =
+      await window.GomezAuth.getSession();
+
+    if (session) {
+      window.location.href =
+        next || 'minha-conta.html';
+
       return;
     }
-  }catch(error){
-    showError(error.message || 'Não foi possível inicializar o login.');
+
+    document
+      .querySelectorAll('[data-provider]')
+      .forEach(button => {
+
+        button.addEventListener('click', async () => {
+
+          button.disabled = true;
+
+          const original =
+            button.innerHTML;
+
+          button.innerHTML =
+            'Abrindo…';
+
+          try {
+
+            await window.GomezAuth.signIn(
+              button.dataset.provider,
+              next || 'minha-conta.html'
+            );
+
+          } catch(error) {
+
+            showError(
+              error.message ||
+              'Não foi possível iniciar o login.'
+            );
+
+            button.disabled = false;
+            button.innerHTML = original;
+          }
+
+        });
+
+      });
+
+  } catch(error) {
+
+    console.error(
+      'Erro ao inicializar GomezAuth:',
+      error
+    );
+
+    showError(
+      error.message ||
+      'Não foi possível inicializar o login.'
+    );
+
   }
-
-  document.querySelectorAll('[data-provider]').forEach(button => {
-    button.addEventListener('click', async () => {
-      button.disabled = true;
-      const original = button.textContent;
-      button.textContent = 'Abrindo…';
-      try{
-        await GomezAuth.signIn(button.dataset.provider, next || 'minha-conta.html');
-      }catch(error){
-        showError(error.message || 'Não foi possível iniciar o login.');
-        button.disabled = false;
-        button.textContent = original;
-      }
-    });
-  });
 });
 </script>
 </html>
