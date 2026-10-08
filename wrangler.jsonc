@@ -18,5 +18,6 @@
   "vars": {
     "GOMEZ_ORIGIN_CEP": "71725207",
     "MELHOR_ENVIO_USER_AGENT": "Gomez Relógios (hugoataidesgomes@gmail.com)"
+    "SUPABASE_URL": "https://pdllxurhmesadtuiisfr.supabase.co/rest/v1/"
   }
 }
