@@ -1,6 +1,6 @@
-import { onRequestPost as shipping } from "../functions/api/shipping.js";
-import { onRequestPost as checkout } from "../functions/api/checkout.js";
-import { onRequestPost as webhook } from "../functions/api/mercadopago-webhook.js";
+import { onRequestPost as shipping } from "../functions/shipping.js";
+import { onRequestPost as checkout } from "../functions/checkout.js";
+import { onRequestPost as webhook } from "../functions/mercadopago-webhook.js";
 
 function json(data, status = 200) {
   return new Response(
@@ -19,10 +19,9 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    /*
-     * APIs da Gomez
-     */
-
+    // ============================
+    // API DE FRETE
+    // ============================
     if (
       url.pathname === "/api/shipping" &&
       request.method === "POST"
@@ -34,6 +33,9 @@ export default {
       });
     }
 
+    // ============================
+    // CHECKOUT MERCADO PAGO
+    // ============================
     if (
       url.pathname === "/api/checkout" &&
       request.method === "POST"
@@ -45,6 +47,9 @@ export default {
       });
     }
 
+    // ============================
+    // WEBHOOK MERCADO PAGO
+    // ============================
     if (
       url.pathname === "/api/mercadopago-webhook" &&
       request.method === "POST"
@@ -56,10 +61,9 @@ export default {
       });
     }
 
-    /*
-     * Outras rotas /api
-     */
-
+    // ============================
+    // OUTRAS ROTAS /api
+    // ============================
     if (url.pathname.startsWith("/api/")) {
       return json(
         {
@@ -69,11 +73,9 @@ export default {
       );
     }
 
-    /*
-     * Todas as demais requisições:
-     * HTML, CSS, JS, imagens etc.
-     */
-
+    // ============================
+    // SITE
+    // ============================
     return env.ASSETS.fetch(request);
   }
 };
