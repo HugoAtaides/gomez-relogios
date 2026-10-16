@@ -281,6 +281,9 @@ export async function onRequestPost({ request, env }){
     const baseUrl = new URL(request.url).origin;
 
     const preference = {
+        payment_methods: {
+    installments: 10
+  },
       items: items.map(item => ({
         id: item.id,
         title: item.title,
