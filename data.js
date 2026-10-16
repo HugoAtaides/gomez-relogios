@@ -23,7 +23,7 @@ window.PRODUCTS = [
   {
     id: 'orient-mbss-1519-g1sx',
     brand: 'Orient',
-    name: 'Solartech Elite Sea MBSS 1519 G1SX',
+    name: ' Orient Solartech Elite Sea MBSS 1519 G1SX',
     category: 'Solar',
     price: 1198.00,
     compareAt: 1290.00,
@@ -50,7 +50,7 @@ window.PRODUCTS = [
   {
     id: 'orient-eternal-mgss1269-g1kx',
     brand: 'Orient',
-    name: 'Eternal MGSS1269 G1KX',
+    name: 'Orient Eternal MGSS1269 G1KX',
     category: 'Quartz',
     price: 898.00,
     compareAt: 1098.00,
@@ -77,7 +77,7 @@ window.PRODUCTS = [
   {
     id: 'orient-mbss-c308',
     brand: 'Orient',
-    name: 'MBSSC308',
+    name: 'Orient MBSSC308',
     category: 'Solar',
     price: 1398.00,
     compareAt: 1498.00,
@@ -106,7 +106,7 @@ window.PRODUCTS = [
   {
     id: 'mondaine-32951g0mvne2',
     brand: 'Mondaine',
-    name: '32951G0MVNE2',
+    name: 'Mondaine 32951G0MVNE2',
     category: 'Quartz',
     price: 328.00,
     compareAt: 448.00,
