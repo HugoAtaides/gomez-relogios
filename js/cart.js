@@ -75,6 +75,47 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div id="cartShippingResults" class="shipping-results"></div>
           </div>
+          
+<div class="delivery-form">
+  <h3>Endereço de entrega</h3>
+  <p>Informe onde devemos entregar seu relógio.</p>
+
+  <label for="deliveryName">Nome do destinatário *</label>
+  <input class="input" id="deliveryName" autocomplete="name" required
+    placeholder="Nome completo">
+
+  <label for="deliveryStreet">Rua ou avenida *</label>
+  <input class="input" id="deliveryStreet" autocomplete="address-line1" required
+    placeholder="Nome da rua">
+
+  <div class="form-grid">
+    <div>
+      <label for="deliveryNumber">Número *</label>
+      <input class="input" id="deliveryNumber" required
+        placeholder="Número da casa">
+    </div>
+    <div>
+      <label for="deliveryComplement">Complemento</label>
+      <input class="input" id="deliveryComplement"
+        placeholder="Apto., bloco etc.">
+    </div>
+  </div>
+
+  <label for="deliveryDistrict">Bairro *</label>
+  <input class="input" id="deliveryDistrict" required
+    placeholder="Bairro">
+
+  <label for="deliveryCity">Cidade *</label>
+  <input class="input" id="deliveryCity" required
+    placeholder="Cidade">
+
+  <label for="deliveryState">Estado (UF) *</label>
+  <input class="input" id="deliveryState" maxlength="2" required
+    placeholder="DF">
+
+  <p class="small">O CEP informado acima será utilizado como CEP de entrega.</p>
+</div>
+
 
           <div class="total-line total"><span>Total</span><strong id="cartTotal">${Gomez.money(Gomez.productTotal())}</strong></div>
 
@@ -113,6 +154,78 @@ document.addEventListener('DOMContentLoaded', () => {
       if(v.length>5) v=v.slice(0,5)+'-'+v.slice(5);
       cep.value=v;
     });
+    
+let cepLookupTimer;
+
+cep.addEventListener('blur', async () => {
+  const postalCode = cep.value.replace(/\D/g, '');
+
+  if (postalCode.length !== 8) return;
+
+  
+const deliveryAddress = {
+  recipient: document.querySelector('#deliveryName')?.value.trim() || '',
+  street: document.querySelector('#deliveryStreet')?.value.trim() || '',
+  number: document.querySelector('#deliveryNumber')?.value.trim() || '',
+  complement: document.querySelector('#deliveryComplement')?.value.trim() || '',
+  district: document.querySelector('#deliveryDistrict')?.value.trim() || '',
+  city: document.querySelector('#deliveryCity')?.value.trim() || '',
+  state: document.querySelector('#deliveryState')?.value.trim().toUpperCase() || '',
+  postal_code: document.querySelector('#cartCep')?.value.replace(/\D/g, '') || ''
+};
+
+const requiredAddressFields = [
+  ['recipient', 'nome do destinatário'],
+  ['street', 'rua ou avenida'],
+  ['number', 'número'],
+  ['district', 'bairro'],
+  ['city', 'cidade'],
+  ['state', 'estado'],
+  ['postal_code', 'CEP']
+];
+
+const missingField = requiredAddressFields.find(
+  ([field]) => !deliveryAddress[field]
+);
+
+if (missingField) {
+  alert(`Preencha o campo obrigatório: ${missingField[1]}.`);
+  return;
+}
+
+if (!/^\d{8}$/.test(deliveryAddress.postal_code)) {
+  alert('Informe um CEP válido com 8 números.');
+  return;
+}
+
+  
+  try {
+    const response = await fetch(
+      `https://viacep.com.br/ws/${postalCode}/json/`
+    );
+    const address = await response.json();
+
+    if (address.erro) {
+      alert('CEP não encontrado. Confira o número informado.');
+      return;
+    }
+
+    document.querySelector('#deliveryStreet').value =
+      address.logradouro || '';
+
+    document.querySelector('#deliveryDistrict').value =
+      address.bairro || '';
+
+    document.querySelector('#deliveryCity').value =
+      address.localidade || '';
+
+    document.querySelector('#deliveryState').value =
+      address.uf || '';
+  } catch {
+    alert('Não foi possível consultar o CEP. Preencha o endereço manualmente.');
+  }
+});
+
 
     document.querySelector('#cartShip').addEventListener('click',()=>quoteShipping(cep.value));
     document.querySelector('#checkoutBtn').addEventListener('click',checkout);
@@ -194,14 +307,16 @@ document.addEventListener('DOMContentLoaded', () => {
           'Content-Type':'application/json',
           'Authorization':`Bearer ${token}`
         },
-        body:JSON.stringify({
-          cart:Gomez.cart(),
-          shipping:shipping?{
-            price:Number(shipping.price||0),
-            name:shipping.name,
-            delivery_time:Number(shipping.delivery_time||0),
-            id:shipping.id||shipping.service||null
-          }:null
+        body: JSON.stringify({
+  cart: Gomez.cart(),
+  deliveryAddress,
+  shipping: shipping ? {
+    price: Number(shipping.price || 0),
+    name: shipping.name,
+    delivery_time: Number(shipping.delivery_time || 0),
+    id: shipping.id || shipping.service || null
+  } : null
+})
         })
       });
       const data=await r.json();
