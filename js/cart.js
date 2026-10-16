@@ -301,24 +301,25 @@ if (!/^\d{8}$/.test(deliveryAddress.postal_code)) {
       const token = session?.access_token;
       if(!token) throw new Error('Sessão inválida. Entre novamente para continuar.');
 
-      const r=await fetch('/api/checkout',{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'Authorization':`Bearer ${token}`
+
+      const r = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-  cart: Gomez.cart(),
-  deliveryAddress,
-  shipping: shipping ? {
-    price: Number(shipping.price || 0),
-    name: shipping.name,
-    delivery_time: Number(shipping.delivery_time || 0),
-    id: shipping.id || shipping.service || null
-  } : null
-})
+          cart: Gomez.cart(),
+          deliveryAddress,
+          shipping: shipping ? {
+            price: Number(shipping.price || 0),
+            name: shipping.name,
+            delivery_time: Number(shipping.delivery_time || 0),
+            id: shipping.id || shipping.service || null
+          } : null
         })
       });
+
       const data=await r.json();
       if(!r.ok) throw new Error(data.error||'Não foi possível iniciar o pagamento.');
 
