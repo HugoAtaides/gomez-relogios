@@ -199,10 +199,59 @@ document.addEventListener('DOMContentLoaded', () => {
     shipButton.addEventListener('click', () => quoteShipping(cep.value));
     document.querySelector('#checkoutBtn').addEventListener('click', checkout);
 
-    const wa = document.querySelector('#waBtn');
-    wa.href = Gomez.whatsappUrl(
-      Gomez.orderMessage(Gomez.cart(), {}, shipping)
-    );
+const wa = document.querySelector('#waBtn');
+
+function updateWhatsAppLink(){
+  const number = document.querySelector('#deliveryNumber')?.value.trim() || '';
+  const complement = document.querySelector('#deliveryComplement')?.value.trim() || '';
+
+  const addressText = cepAddress
+    ? [
+        `CEP: ${cepAddress.postal_code}`,
+        `Endereço: ${cepAddress.street || 'Não informado'}, nº ${number || 'não informado'}`,
+        complement ? `Complemento: ${complement}` : '',
+        `Bairro: ${cepAddress.district || 'Não informado'}`,
+        `Cidade/UF: ${cepAddress.city || 'Não informada'}/${cepAddress.state || ''}`
+      ].filter(Boolean).join('\n')
+    : 'Endereço: ainda não informado';
+
+  const baseMessage = Gomez.orderMessage(
+    Gomez.cart(),
+    {},
+    shipping
+  );
+
+  const message = `${baseMessage}\n\n*ENDEREÇO DE ENTREGA*\n${addressText}`;
+
+  wa.href = Gomez.whatsappUrl(message);
+}
+
+wa.addEventListener('click', (event) => {
+  updateWhatsAppLink();
+
+  if(!cepAddress){
+    event.preventDefault();
+    alert('Informe o CEP e clique em Calcular frete antes de finalizar pelo WhatsApp.');
+    return;
+  }
+
+  const number = document.querySelector('#deliveryNumber').value.trim();
+
+  if(!number){
+    event.preventDefault();
+    alert('Informe o número da residência antes de finalizar pelo WhatsApp.');
+    document.querySelector('#deliveryNumber').focus();
+    return;
+  }
+});
+
+document.querySelector('#deliveryNumber')
+  .addEventListener('input', updateWhatsAppLink);
+
+document.querySelector('#deliveryComplement')
+  .addEventListener('input', updateWhatsAppLink);
+
+updateWhatsAppLink();
   }
 
   async function quoteShipping(cepRaw){
@@ -304,9 +353,29 @@ document.addEventListener('DOMContentLoaded', () => {
           document.querySelector('#cartTotal').textContent =
             Gomez.money(Gomez.productTotal() + Number(shipping.price || 0));
 
-          document.querySelector('#waBtn').href = Gomez.whatsappUrl(
-            Gomez.orderMessage(Gomez.cart(), {}, shipping)
-          );
+const wa = document.querySelector('#waBtn');
+const number = document.querySelector('#deliveryNumber').value.trim();
+const complement = document.querySelector('#deliveryComplement').value.trim();
+
+const addressText = cepAddress
+  ? [
+      `CEP: ${cepAddress.postal_code}`,
+      `Endereço: ${cepAddress.street || 'Não informado'}, nº ${number || 'não informado'}`,
+      complement ? `Complemento: ${complement}` : '',
+      `Bairro: ${cepAddress.district || 'Não informado'}`,
+      `Cidade/UF: ${cepAddress.city || 'Não informada'}/${cepAddress.state || ''}`
+    ].filter(Boolean).join('\n')
+  : 'Endereço: ainda não informado';
+
+const baseMessage = Gomez.orderMessage(
+  Gomez.cart(),
+  {},
+  shipping
+);
+
+wa.href = Gomez.whatsappUrl(
+  `${baseMessage}\n\n*ENDEREÇO DE ENTREGA*\n${addressText}`
+);
 
           out.querySelectorAll('[data-ship-index]').forEach(optionButton => {
             optionButton.style.outline = 'none';
