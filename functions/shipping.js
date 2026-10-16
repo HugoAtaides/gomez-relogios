@@ -31,25 +31,25 @@ const CATALOG = {
     height: 8,
     length: 18
   },
-  'orient-mgss1269-g1kx': {
+  'orient-eternal-mgss1269-g1kx': {
     weight: 0.60,
     width: 12,
     height: 8,
     length: 18
   },
-  'orient-c288-d1sx': {
+  'orient-mbss-c308': {
     weight: 0.60,
     width: 12,
     height: 8,
     length: 18
   },
-  'orient-eternal-mgss1258': {
+  'mondaine-32951g0mvne2': {
     weight: 0.60,
     width: 12,
     height: 8,
     length: 18
   },
-  'technos-golf-2115udk': {
+  'tissot-seastar-a660-760k': {
     weight: 0.60,
     width: 12,
     height: 8,
