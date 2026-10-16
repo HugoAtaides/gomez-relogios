@@ -108,25 +108,25 @@ async function supabaseDelete({ supabaseUrl, secretKey, table, column, value }){
 }
 
 const catalog = {
-  'orient-mbss-1519-g1sx': {
+  'orient-mbss-1519-g1sx: {
     title: 'Orient Solartech Elite Sea MBSS 1519 G1SX',
-    price: 1.00
+    price: 1198.00
   },
-  'orient-mgss1269-g1kx': {
-    title: 'Orient MGSS1269 G1KX',
-    price: 899.00
+  'orient-eternal-mgss1269-g1kx': {
+    title: 'Orient Eternal MGSS1269 G1KX',
+    price: 898.00
   },
-  'orient-c288-d1sx': {
-    title: 'Orient Solartech Elite Sea MBSS C288 D1SX',
-    price: 1390.00
+  'orient-mbss-c308': {
+    title: 'Orient MBSSC308',
+    price: 1398.00
   },
-  'orient-eternal-mgss1258': {
-    title: 'Orient Eternal MGSS 1258',
-    price: 799.00
+  'mondaine-32951g0mvne2': {
+    title: 'Mondaine 32951G0MVNE2',
+    price: 328.00
   },
-  'technos-golf-2115udk': {
-    title: 'Technos Golf 2115UDK',
-    price: 566.00
+  'tissot-seastar-a660-760k': {
+    title: 'Tissot Seastar A660/760K',
+    price: 1500.00
   }
 };
 
