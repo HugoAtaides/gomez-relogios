@@ -1,3 +1,4 @@
+
 // GOMEZ RELÓGIOS — POST /api/checkout
 // Requer no Cloudflare:
 // MP_ACCESS_TOKEN
@@ -10,30 +11,42 @@ const headers = {
   'Cache-Control': 'no-store'
 };
 
-function json(data, status=200){
+function json(data, status = 200){
   return new Response(JSON.stringify(data), { status, headers });
 }
 
 function supabaseConfig(env){
   return {
     url: String(env.SUPABASE_URL || '').replace(/\/$/, ''),
-    publishableKey: String(env.SUPABASE_PUBLISHABLE_KEY || env.SUPABASE_ANON_KEY || ''),
-    secretKey: String(env.SUPABASE_SECRET_KEY || env.SUPABASE_SERVICE_ROLE_KEY || '')
+    publishableKey: String(
+      env.SUPABASE_PUBLISHABLE_KEY || env.SUPABASE_ANON_KEY || ''
+    ),
+    secretKey: String(
+      env.SUPABASE_SECRET_KEY || env.SUPABASE_SERVICE_ROLE_KEY || ''
+    )
   };
 }
 
 async function supabaseUser({ supabaseUrl, publishableKey, accessToken }){
-  if(!supabaseUrl || !publishableKey) throw new Error('Supabase não configurado no backend.');
+  if(!supabaseUrl || !publishableKey){
+    throw new Error('Supabase não configurado no backend.');
+  }
+
   const response = await fetch(`${supabaseUrl}/auth/v1/user`, {
     headers: {
       apikey: publishableKey,
       Authorization: `Bearer ${accessToken}`
     }
   });
+
   const data = await response.json();
+
   if(!response.ok || !data?.id){
-    throw new Error('Sua sessão de login expirou. Entre novamente para concluir a compra.');
+    throw new Error(
+      'Sua sessão de login expirou. Entre novamente para concluir a compra.'
+    );
   }
+
   return data;
 }
 
@@ -48,22 +61,33 @@ async function supabaseInsert({ supabaseUrl, secretKey, table, row }){
     },
     body: JSON.stringify(row)
   });
+
   const data = await response.json();
-  if(!response.ok) throw new Error(data?.message || data?.hint || 'Não foi possível registrar o pedido.');
+
+  if(!response.ok){
+    throw new Error(
+      data?.message || data?.hint || 'Não foi possível registrar o pedido.'
+    );
+  }
+
   return Array.isArray(data) ? data[0] : data;
 }
 
 async function supabaseUpdate({ supabaseUrl, secretKey, table, column, value, row }){
-  const response = await fetch(`${supabaseUrl}/rest/v1/${table}?${encodeURIComponent(column)}=eq.${encodeURIComponent(value)}`, {
-    method: 'PATCH',
-    headers: {
-      apikey: secretKey,
-      Authorization: `Bearer ${secretKey}`,
-      'Content-Type': 'application/json',
-      Prefer: 'return=representation'
-    },
-    body: JSON.stringify(row)
-  });
+  const response = await fetch(
+    `${supabaseUrl}/rest/v1/${table}?${encodeURIComponent(column)}=eq.${encodeURIComponent(value)}`,
+    {
+      method: 'PATCH',
+      headers: {
+        apikey: secretKey,
+        Authorization: `Bearer ${secretKey}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=representation'
+      },
+      body: JSON.stringify(row)
+    }
+  );
+
   if(!response.ok){
     const data = await response.json().catch(() => ({}));
     throw new Error(data?.message || 'Não foi possível atualizar o pedido.');
@@ -71,106 +95,180 @@ async function supabaseUpdate({ supabaseUrl, secretKey, table, column, value, ro
 }
 
 async function supabaseDelete({ supabaseUrl, secretKey, table, column, value }){
-  await fetch(`${supabaseUrl}/rest/v1/${table}?${encodeURIComponent(column)}=eq.${encodeURIComponent(value)}`, {
-    method: 'DELETE',
-    headers: {
-      apikey: secretKey,
-      Authorization: `Bearer ${secretKey}`
+  await fetch(
+    `${supabaseUrl}/rest/v1/${table}?${encodeURIComponent(column)}=eq.${encodeURIComponent(value)}`,
+    {
+      method: 'DELETE',
+      headers: {
+        apikey: secretKey,
+        Authorization: `Bearer ${secretKey}`
+      }
     }
-  });
+  );
 }
 
 const catalog = {
-  'orient-mbss-1519-g1sx': { title:'Orient Solartech Elite Sea MBSS 1519 G1SX', price:1.00 },
-  'orient-mgss1269-g1kx': { title:'Orient MGSS1269 G1KX', price:899.00 },
-  'orient-c288-d1sx': { title:'Orient Solartech Elite Sea MBSS C288 D1SX', price:1390.00 },
-  'orient-eternal-mgss1258': { title:'Orient Eternal MGSS 1258', price:799.00 },
-  'technos-golf-2115udk': { title:'Technos Golf 2115UDK', price:566.00 }
+  'orient-mbss-1519-g1sx': {
+    title: 'Orient Solartech Elite Sea MBSS 1519 G1SX',
+    price: 1.00
+  },
+  'orient-mgss1269-g1kx': {
+    title: 'Orient MGSS1269 G1KX',
+    price: 899.00
+  },
+  'orient-c288-d1sx': {
+    title: 'Orient Solartech Elite Sea MBSS C288 D1SX',
+    price: 1390.00
+  },
+  'orient-eternal-mgss1258': {
+    title: 'Orient Eternal MGSS 1258',
+    price: 799.00
+  },
+  'technos-golf-2115udk': {
+    title: 'Technos Golf 2115UDK',
+    price: 566.00
+  }
 };
 
 function orderCode(){
   const date = new Date();
-  const stamp = `${date.getUTCFullYear()}${String(date.getUTCMonth()+1).padStart(2,'0')}${String(date.getUTCDate()).padStart(2,'0')}`;
-  const suffix = crypto.randomUUID().replace(/-/g,'').slice(0,6).toUpperCase();
+  const stamp =
+    `${date.getUTCFullYear()}${String(date.getUTCMonth() + 1).padStart(2, '0')}${String(date.getUTCDate()).padStart(2, '0')}`;
+  const suffix = crypto.randomUUID().replace(/-/g, '').slice(0, 6).toUpperCase();
+
   return `GZ-${stamp}-${suffix}`;
 }
 
 export async function onRequestPost({ request, env }){
-  let createdOrderId = null;
-
   try{
-    if(!env.MP_ACCESS_TOKEN) return json({ error:'Mercado Pago ainda não foi configurado. Cadastre MP_ACCESS_TOKEN no Cloudflare.' }, 503);
-
-    const authHeader = request.headers.get('Authorization') || '';
-    const accessToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
-    if(!accessToken) return json({ error:'Faça login para concluir a compra pelo site.' }, 401);
-
-    const { url:supabaseUrl, publishableKey, secretKey } = supabaseConfig(env);
-    if(!supabaseUrl || !publishableKey || !secretKey){
-      return json({ error:'O banco de pedidos ainda não foi configurado no Cloudflare.' }, 503);
+    if(!env.MP_ACCESS_TOKEN){
+      return json({
+        error: 'Mercado Pago ainda não foi configurado. Cadastre MP_ACCESS_TOKEN no Cloudflare.'
+      }, 503);
     }
 
-    const user = await supabaseUser({ supabaseUrl, publishableKey, accessToken });
-    const body = await request.json();
-    
-const address = body.deliveryAddress;
+    const authHeader = request.headers.get('Authorization') || '';
+    const accessToken = authHeader.startsWith('Bearer ')
+      ? authHeader.slice(7).trim()
+      : '';
 
-if (
-  !address ||
-  !address.recipient?.trim() ||
-  !address.street?.trim() ||
-  !address.number?.trim() ||
-  !address.district?.trim() ||
-  !address.city?.trim() ||
-  !/^[A-Za-z]{2}$/.test(address.state || '') ||
-  !/^\d{8}$/.test(address.postal_code || '')
-) {
-  return json({
-    error: 'Informe todos os dados obrigatórios do endereço de entrega.'
-  }, 400);
-}
+    if(!accessToken){
+      return json({
+        error: 'Faça login para concluir a compra pelo site.'
+      }, 401);
+    }
+
+    const {
+      url: supabaseUrl,
+      publishableKey,
+      secretKey
+    } = supabaseConfig(env);
+
+    if(!supabaseUrl || !publishableKey || !secretKey){
+      return json({
+        error: 'O banco de pedidos ainda não foi configurado no Cloudflare.'
+      }, 503);
+    }
+
+    const user = await supabaseUser({
+      supabaseUrl,
+      publishableKey,
+      accessToken
+    });
+
+    const body = await request.json();
+    const address = body.deliveryAddress;
+
+    // O endereço é obtido pelo CEP.
+    // O cliente precisa informar apenas o número da residência.
+    if(
+      !address ||
+      !String(address.number || '').trim() ||
+      !/^\d{8}$/.test(String(address.postal_code || '')) ||
+      !String(address.city || '').trim() ||
+      !/^[A-Za-z]{2}$/.test(String(address.state || ''))
+    ){
+      return json({
+        error: 'Informe um CEP válido e o número da residência antes de continuar.'
+      }, 400);
+    }
 
     const cart = Array.isArray(body.cart) ? body.cart : [];
-    if(!cart.length) return json({ error:'Carrinho vazio.' }, 400);
+
+    if(!cart.length){
+      return json({ error: 'Carrinho vazio.' }, 400);
+    }
 
     const items = [];
+
     for(const raw of cart){
       const id = String(raw?.id || '');
       const product = catalog[id];
-      if(!product) return json({ error:'Produto não reconhecido.' }, 400);
-      const quantity = Math.max(1, Math.min(10, Math.floor(Number(raw?.qty || 1))));
-      items.push({ id, title:product.title, quantity, unit_price:product.price, currency_id:'BRL' });
+
+      if(!product){
+        return json({ error: 'Produto não reconhecido.' }, 400);
+      }
+
+      const quantity = Math.max(
+        1,
+        Math.min(10, Math.floor(Number(raw?.qty || 1)))
+      );
+
+      items.push({
+        id,
+        title: product.title,
+        quantity,
+        unit_price: product.price,
+        currency_id: 'BRL'
+      });
     }
 
-    const subtotal = items.reduce((sum, item) => sum + item.unit_price * item.quantity, 0);
-    const shippingPayload = body.shipping && Number(body.shipping.price) >= 0 ? body.shipping : null;
+    const subtotal = items.reduce(
+      (sum, item) => sum + item.unit_price * item.quantity,
+      0
+    );
+
+    const shippingPayload =
+      body.shipping && Number(body.shipping.price) >= 0
+        ? body.shipping
+        : null;
+
     const shippingCost = Number(shippingPayload?.price || 0);
     const total = Number((subtotal + shippingCost).toFixed(2));
-    if(!Number.isFinite(total) || total <= 0) return json({ error:'Total do pedido inválido.' }, 400);
+
+    if(!Number.isFinite(total) || total <= 0){
+      return json({ error: 'Total do pedido inválido.' }, 400);
+    }
 
     const code = orderCode();
+
+    const recipient =
+      user.user_metadata?.full_name ||
+      user.user_metadata?.name ||
+      (user.email ? user.email.split('@')[0] : 'Cliente Gomez');
+
     const created = await supabaseInsert({
       supabaseUrl,
       secretKey,
-      table:'orders',
-      row:{
+      table: 'orders',
+      row: {
         order_code: code,
         user_id: user.id,
-        customer_name: address.recipient.trim(),
-shipping_address: {
-  recipient: address.recipient.trim(),
-  street: address.street.trim(),
-  number: address.number.trim(),
-  complement: (address.complement || '').trim(),
-  district: address.district.trim(),
-  city: address.city.trim(),
-  state: address.state.toUpperCase(),
-  postal_code: address.postal_code
-},
+        customer_name: recipient,
+        shipping_address: {
+          recipient,
+          street: String(address.street || '').trim(),
+          number: String(address.number).trim(),
+          complement: String(address.complement || '').trim(),
+          district: String(address.district || '').trim(),
+          city: String(address.city).trim(),
+          state: String(address.state).trim().toUpperCase(),
+          postal_code: String(address.postal_code)
+        },
         customer_email: user.email || null,
-        status:'awaiting_payment',
-        payment_status:'created',
-        fulfillment_status:'not_started',
+        status: 'awaiting_payment',
+        payment_status: 'created',
+        fulfillment_status: 'not_started',
         order_items: items,
         subtotal: Number(subtotal.toFixed(2)),
         shipping_cost: Number(shippingCost.toFixed(2)),
@@ -179,57 +277,82 @@ shipping_address: {
         total
       }
     });
-    createdOrderId = created.id;
 
     const baseUrl = new URL(request.url).origin;
+
     const preference = {
       items: items.map(item => ({
-        id:item.id,
-        title:item.title,
-        quantity:item.quantity,
-        currency_id:'BRL',
-        unit_price:item.unit_price
+        id: item.id,
+        title: item.title,
+        quantity: item.quantity,
+        currency_id: 'BRL',
+        unit_price: item.unit_price
       })),
-      ...(shippingCost > 0 ? { shipments:{ cost:shippingCost, mode:'not_specified' } } : {}),
-      ...(user.email ? { payer:{ email:user.email } } : {}),
-      back_urls:{
-        success:`${baseUrl}/sucesso.html`,
-        pending:`${baseUrl}/pendente.html`,
-        failure:`${baseUrl}/falha.html`
+      ...(shippingCost > 0
+        ? { shipments: { cost: shippingCost, mode: 'not_specified' } }
+        : {}),
+      ...(user.email ? { payer: { email: user.email } } : {}),
+      back_urls: {
+        success: `${baseUrl}/sucesso.html`,
+        pending: `${baseUrl}/pendente.html`,
+        failure: `${baseUrl}/falha.html`
       },
-      auto_return:'approved',
-      notification_url:`${baseUrl}/api/mercadopago-webhook`,
-      external_reference:code,
-      statement_descriptor:'GOMEZ RELOGIOS',
-      metadata:{ order_id:created.id, order_code:code, user_id:user.id }
+      auto_return: 'approved',
+      notification_url: `${baseUrl}/api/mercadopago-webhook`,
+      external_reference: code,
+      statement_descriptor: 'GOMEZ RELOGIOS',
+      metadata: {
+        order_id: created.id,
+        order_code: code,
+        user_id: user.id
+      }
     };
 
-    const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
-      method:'POST',
-      headers:{
-        Authorization:`Bearer ${env.MP_ACCESS_TOKEN}`,
-        'Content-Type':'application/json'
-      },
-      body:JSON.stringify(preference)
-    });
+    const response = await fetch(
+      'https://api.mercadopago.com/checkout/preferences',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${env.MP_ACCESS_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(preference)
+      }
+    );
 
     const data = await response.json();
+
     if(!response.ok){
-      await supabaseDelete({ supabaseUrl, secretKey, table:'orders', column:'id', value:created.id });
-      return json({ error:data?.message || 'O Mercado Pago recusou a criação do pagamento.' }, response.status);
+      await supabaseDelete({
+        supabaseUrl,
+        secretKey,
+        table: 'orders',
+        column: 'id',
+        value: created.id
+      });
+
+      return json({
+        error: data?.message || 'O Mercado Pago recusou a criação do pagamento.'
+      }, response.status);
     }
 
     await supabaseUpdate({
       supabaseUrl,
       secretKey,
-      table:'orders',
-      column:'id',
-      value:created.id,
-      row:{ mp_preference_id:data.id }
+      table: 'orders',
+      column: 'id',
+      value: created.id,
+      row: { mp_preference_id: data.id }
     });
 
-    return json({ init_point:data.init_point, id:data.id, order_code:code });
+    return json({
+      init_point: data.init_point,
+      id: data.id,
+      order_code: code
+    });
   }catch(error){
-    return json({ error:error?.message || 'Erro inesperado ao iniciar a compra.' }, 500);
+    return json({
+      error: error?.message || 'Erro inesperado ao iniciar a compra.'
+    }, 500);
   }
 }
