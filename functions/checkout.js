@@ -112,6 +112,24 @@ export async function onRequestPost({ request, env }){
 
     const user = await supabaseUser({ supabaseUrl, publishableKey, accessToken });
     const body = await request.json();
+    
+const address = body.deliveryAddress;
+
+if (
+  !address ||
+  !address.recipient?.trim() ||
+  !address.street?.trim() ||
+  !address.number?.trim() ||
+  !address.district?.trim() ||
+  !address.city?.trim() ||
+  !/^[A-Za-z]{2}$/.test(address.state || '') ||
+  !/^\d{8}$/.test(address.postal_code || '')
+) {
+  return json({
+    error: 'Informe todos os dados obrigatórios do endereço de entrega.'
+  }, 400);
+}
+
     const cart = Array.isArray(body.cart) ? body.cart : [];
     if(!cart.length) return json({ error:'Carrinho vazio.' }, 400);
 
@@ -138,7 +156,17 @@ export async function onRequestPost({ request, env }){
       row:{
         order_code: code,
         user_id: user.id,
-        customer_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+        customer_name: address.recipient.trim(),
+shipping_address: {
+  recipient: address.recipient.trim(),
+  street: address.street.trim(),
+  number: address.number.trim(),
+  complement: (address.complement || '').trim(),
+  district: address.district.trim(),
+  city: address.city.trim(),
+  state: address.state.toUpperCase(),
+  postal_code: address.postal_code
+},
         customer_email: user.email || null,
         status:'awaiting_payment',
         payment_status:'created',
