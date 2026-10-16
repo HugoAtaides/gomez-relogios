@@ -62,7 +62,7 @@ window.PRODUCTS = [
               'assets/produtos/orient-1269-frente4.jpg',
               'assets/produtos/orient-1269-frente5.jpg',
               'assets/produtos/orient-1269-frente6.jpg'],
-    description: 'Relógio Orient com tecnologia Solartech e proposta esportiva elegante, pensado para quem quer praticidade sem abrir mão de presença.',
+    description: 'Relógio Orient original slim, com calendário e mostrador Sunray.',
     specs: {
       'Marca': 'Orient',
       'Modelo': 'Eternal MGSS1269 G1KX',
