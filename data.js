@@ -3,8 +3,8 @@
 
 window.GOMEZ_CONFIG = {
   storeName: 'Gomez Relógios',
-  whatsapp: '5561999999999', // TROQUE pelo WhatsApp da Gomez, somente números, com DDI 55.
-  originCep: '70000000',      // TROQUE pelo CEP de postagem da Gomez.
+  whatsapp: '5561999490969', // TROQUE pelo WhatsApp da Gomez, somente números, com DDI 55.
+  originCep: '71725207',      // TROQUE pelo CEP de postagem da Gomez.
   city: 'Brasília - DF',
   currency: 'BRL',
   shippingEnabled: true,
@@ -25,7 +25,7 @@ window.PRODUCTS = [
     brand: 'Orient',
     name: 'Solartech Elite Sea MBSS 1519 G1SX',
     category: 'Solar',
-    price: 1.00,
+    price: 1198.00,
     compareAt: 1290.00,
     stock: 1,
     badge: 'Destaque',
@@ -35,9 +35,10 @@ window.PRODUCTS = [
     specs: {
       'Marca': 'Orient',
       'Modelo': 'MBSS 1519 G1SX',
+      'Diâmetro da caixa': '40 mm',
       'Tecnologia': 'Solartech',
       'Movimento': 'Quartzo solar',
-      'Resistência à água': 'Consulte a ficha do fabricante',
+      'Resistência à água': '100m',
       'Garantia': 'Garantia conforme condições do produto'
     },
     shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
