@@ -134,6 +134,34 @@ window.PRODUCTS = [
     },
     shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
   },
+    {
+    id: 'seculus-39007g0svnq5',
+    brand: 'Seculus',
+    name: 'Seculus 39007G0SVNQ5',
+    category: 'Automático',
+    price: 1450.00,
+    compareAt: 1599.00,
+    stock: 1,
+    image: 'assets/produtos/seculus-39007g0svnq5.jpg',
+    gallery: ['assets/produtos/seculus-39007g0svnq5.jpg',
+              'assets/produtos/seculus-39007g0svnq5 (2).jpg',
+              'assets/produtos/seculus-39007g0svnq5 (3).jpg',
+              'assets/produtos/seculus-39007g0svnq5 (4).jpg',
+              'assets/produtos/seculus-39007g0svnq5 (5).jpg',
+              'assets/produtos/seculus-39007g0svnq5 (6).jpg',
+              'assets/produtos/seculus-39007g0svnq5 (7).jpg'],
+    description: 'O Relógio Masculino Automático Safira Azul Claro - Seculus (Referência: 39007G0SVNQ5) é um modelo automático com estilo esportivo e materiais de alta resistência.',
+    specs: {
+      'Marca': 'Seculus',
+      'Modelo': '39007G0SVNQ5',
+      'Diâmetro da caixa': '40 mm',
+      'Tecnologia': 'Mecânico',
+      'Movimento': 'Automático',
+      'Resistência à água': '100m',
+      'Garantia': '24 meses pelo fabricante Seculus Brasil'
+    },
+    shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
+  },
   {
     id: 'tissot-seastar-a660-760k',
     brand: 'Tissot',
