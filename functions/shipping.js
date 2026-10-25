@@ -49,6 +49,24 @@ const CATALOG = {
     height: 8,
     length: 18
   },
+    'seculus-39007g0svnq5': {
+    weight: 0.60,
+    width: 12,
+    height: 8,
+    length: 18
+  },
+    'mondaine-32993g0mvnc8': {
+    weight: 0.60,
+    width: 12,
+    height: 8,
+    length: 18
+  },
+    'mondaine-m1-33055gpmvrc3': {
+    weight: 0.60,
+    width: 12,
+    height: 8,
+    length: 18
+  },
   'tissot-seastar-a660-760k': {
     weight: 0.60,
     width: 12,
