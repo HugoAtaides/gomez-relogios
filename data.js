@@ -190,6 +190,33 @@ window.PRODUCTS = [
     shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
   },
   {
+    id: 'mondaine-m1-33055gpmvrc3',
+    brand: 'Mondaine',
+    name: 'Mondaine M1 33055GPMVRC3',
+    category: 'Meca-Quartz',
+    price: 998.00,
+    compareAt: 1259.00,
+    stock: 1,
+    image: 'assets/produtos/mondaine-m1.jpg',
+    gallery: ['assets/produtos/mondaine-m1.jpg',
+              'assets/produtos/mondaine-m1 (2).jpg',
+              'assets/produtos/mondaine-m1 (3).jpg',
+              'assets/produtos/mondaine-m1 (4).jpg',
+              'assets/produtos/mondaine-m1 (5).jpg',
+              'assets/produtos/mondaine-m1 (6).jpg'],
+    description: 'O Relógio Masculino M1 Cronógrafo Couro Rosê destaca-se pela caixa em aço de 42 mm com folheação rosê e fundo de rosca, combinando acabamento fosco com detalhes polidos. Seu mostrador azul noturno apresenta índices inspirados nos carros de Fórmula 1, enquanto os ponteiros pretos reforçam a estética esportiva do modelo. Para garantir maior proteção, um dos grandes diferenciais deste relógio é o seu vidro dome em cristal de safira, um acabamento de altíssima qualidade que combina máxima resistência a riscos com um visual refinado e exclusivo. O movimento TMI VK63 Meca-Quartz, que une a precisão do quartzo no uso diário à experiência da alta relojoaria no cronógrafo. Ao acionar a função, o ponteiro central dos segundos desliza de forma fluida e contínua. Essa engenharia proporciona um retorno mecânico preciso e instantâneo à posição de 12 horas ao ser zerado. Para completar o conjunto, o relógio oferece resistência à água de 10 ATM e uma elegante pulseira em couro genuíno na cor preta. Este material garante máximo conforto no uso diário e um visual marcante para as mais diversas ocasiões. A combinação de todos esses atributos entrega um acessório funcional, esportivo e altamente durável.',
+    specs: {
+      'Marca': 'Mondaine',
+      'Modelo': 'M1 33055GPMVRC3',
+      'Diâmetro da caixa': '42 mm',
+      'Tecnologia': 'Cronógrafo',
+      'Movimento': 'Meca-Quartz',
+      'Resistência à água': '100m',
+      'Garantia': 'Garantia conforme condições do produto'
+    },
+    shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
+  },
+  {
     id: 'tissot-seastar-a660-760k',
     brand: 'Tissot',
     name: 'Tissot Seastar A660/760K',
