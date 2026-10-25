@@ -124,6 +124,18 @@ const catalog = {
     title: 'Mondaine 32951G0MVNE2',
     price: 328.00
   },
+    'seculus-39007g0svnq5': {
+    title: 'Seculus 39007G0SVNQ5',
+    price: 1450.00
+  },
+    'mondaine-32993g0mvnc8': {
+    title: 'Mondaine 32993G0MVNC8',
+    price: 750.00
+  },
+    'mondaine-m1-33055gpmvrc3': {
+    title: 'Mondaine M1 33055GPMVRC3',
+    price: 998.00
+  },
   'tissot-seastar-a660-760k': {
     title: 'Tissot Seastar A660/760K',
     price: 1500.00
