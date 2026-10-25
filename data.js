@@ -162,6 +162,33 @@ window.PRODUCTS = [
     },
     shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
   },
+      {
+    id: 'mondaine-32993g0mvnc8',
+    brand: 'Mondaine',
+    name: 'Mondaine 32993G0MVNC8',
+    category: 'Automático',
+    price: 750.00,
+    compareAt: 999.00,
+    stock: 1,
+    image: 'assets/produtos/mondaine-32993g0mvnc8.jpg',
+    gallery: ['assets/produtos/mondaine-32993g0mvnc8.jpg',
+              'assets/produtos/mondaine-32993g0mvnc8 (2).jpg',
+              'assets/produtos/mondaine-32993g0mvnc8 (3).jpg',
+              'assets/produtos/mondaine-32993g0mvnc8 (4).jpg',
+              'assets/produtos/mondaine-32993g0mvnc8 (5).jpg',
+              'assets/produtos/mondaine-32993g0mvnc8 (6).jpg'],
+    description: 'O Relógio Masculino Mondaine 1954 Automático celebra a rica herança suíço-brasileira da marca nesta bela edição comemorativa. Seu requintado mostrador branco traz uma combinação muito tradicional de algarismos romanos com índices completos. Com uma imponente caixa em aço inoxidável de 40mm, ele garante excelente presença e encaixe no pulso masculino. O acabamento polido do metal confere uma estética clássica e atemporal que combina perfeitamente com qualquer ocasião. Movido pela energia natural do pulso, ele traz o robusto maquinismo japonês Miyota 8215 de 21 jóias. Esse sistema de autossuficiência mecânica dispensa baterias e oferece uma excelente reserva de marcha de 42 horas. O modelo opera com frequência de 21.600 vibrações por hora e conta com um prático calendário de data no mostrador. Dispõe ainda de corda manual e da útil função Hacking para a sincronização exata do ponteiro dos segundos. A alta durabilidade da peça é assegurada pelo vidro de cristal mineral e pela estrutura altamente resistente ao desgaste. A elegante pulseira em couro legítimo preto proporciona sobriedade, extremo conforto e um ajuste perfeito ao braço. O fundo de rosca garante uma vedação totalmente precisa, oferecendo uma impressionante resistência à água de 10ATM. É a escolha definitiva para o homem moderno que aprecia a sofisticação e a verdadeira arte da energia em movimento.',
+    specs: {
+      'Marca': 'Mondaine',
+      'Modelo': '32993G0MVNC8',
+      'Diâmetro da caixa': '40 mm',
+      'Tecnologia': 'Mecânico',
+      'Movimento': 'Automático',
+      'Resistência à água': '100m',
+      'Garantia': 'Garantia conforme condições do produto'
+    },
+    shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
+  },
   {
     id: 'tissot-seastar-a660-760k',
     brand: 'Tissot',
