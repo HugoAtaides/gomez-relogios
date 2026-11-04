@@ -1,6 +1,6 @@
 import { onRequestPost as shipping } from "../functions/shipping.js";
 import { onRequestPost as checkout } from "../functions/checkout.js";
-import { onRequestPost as webhook } from "../functions/mercadopago-webhook.js";
+import { onRequestPost as webhook } from "../functions/api/mercadopago-webhook.js";
 
 function json(data, status = 200) {
   return new Response(
