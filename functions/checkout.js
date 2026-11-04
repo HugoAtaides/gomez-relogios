@@ -188,8 +188,24 @@ export async function onRequestPost({ request, env }){
       accessToken
     });
 
-    const body = await request.json();
-    const address = body.deliveryAddress;
+const body = await request.json();
+const address = body.deliveryAddress;
+
+// Valida e normaliza o WhatsApp do cliente.
+const whatsappDigits = String(body.customerWhatsapp || '')
+  .replace(/\D/g, '');
+
+let customerWhatsapp = '';
+
+if (/^\d{10,11}$/.test(whatsappDigits)) {
+  customerWhatsapp = `+55${whatsappDigits}`;
+} else if (/^55\d{10,11}$/.test(whatsappDigits)) {
+  customerWhatsapp = `+${whatsappDigits}`;
+} else {
+  return json({
+    error: 'Informe um número de WhatsApp válido, com DDD.'
+  }, 400);
+}
 
     // O endereço é obtido pelo CEP.
     // O cliente precisa informar apenas o número da residência.
