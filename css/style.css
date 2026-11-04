@@ -476,3 +476,30 @@ footer img{display:none!important}
 .google-login-button{position:relative;justify-content:center;gap:10px}
 .google-mark{display:inline-flex;width:22px;height:22px;align-items:center;justify-content:center;background:#fff;border-radius:50%;flex:0 0 22px}
 .google-mark svg{width:18px;height:18px;display:block}
+
+
+.instagram-chamada {
+  text-align: center;
+  margin: 32px auto;
+  max-width: 600px;
+}
+
+.instagram-chamada p {
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+.instagram-link {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 6px;
+  background: #222;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.instagram-link:hover {
+  opacity: 0.8;
+}
