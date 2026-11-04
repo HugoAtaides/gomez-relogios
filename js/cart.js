@@ -38,6 +38,81 @@ document.addEventListener('DOMContentLoaded', () => {
   let shipping = null;
   let cepAddress = null;
 
+  function formatWhatsApp(value){
+    const digits = String(value || '').replace(/\D/g, '').slice(0, 11);
+
+    if(digits.length <= 2) return digits;
+    if(digits.length <= 6){
+      return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+    }
+    if(digits.length <= 10){
+      return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+    }
+
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+  }
+
+  function getWhatsApp(){
+    const input = document.querySelector('#customerWhatsapp');
+    return (input?.value || '').replace(/\D/g, '');
+  }
+
+  function validateWhatsApp(){
+    const digits = getWhatsApp();
+
+    if(!/^\d{10,11}$/.test(digits)){
+      alert('Informe um número de WhatsApp válido, com DDD.');
+      document.querySelector('#customerWhatsapp')?.focus();
+      return false;
+    }
+
+    return true;
+  }
+
+  function getDeliveryAddress(){
+    const number = document.querySelector('#deliveryNumber')?.value.trim() || '';
+    const complement = document.querySelector('#deliveryComplement')?.value.trim() || '';
+
+    return {
+      recipient: '',
+      street: cepAddress?.street || '',
+      number,
+      complement,
+      district: cepAddress?.district || '',
+      city: cepAddress?.city || '',
+      state: cepAddress?.state || '',
+      postal_code: cepAddress?.postal_code || ''
+    };
+  }
+
+  function updateWhatsAppLink(){
+    const wa = document.querySelector('#waBtn');
+    if(!wa) return;
+
+    const address = getDeliveryAddress();
+
+    const addressText = cepAddress
+      ? [
+          `CEP: ${address.postal_code}`,
+          `Endereço: ${address.street || 'Não informado'}, nº ${address.number || 'não informado'}`,
+          address.complement ? `Complemento: ${address.complement}` : '',
+          `Bairro: ${address.district || 'Não informado'}`,
+          `Cidade/UF: ${address.city || 'Não informada'}/${address.state || ''}`,
+          `WhatsApp para contato: ${getWhatsApp() || 'Não informado'}`
+        ].filter(Boolean).join('\n')
+      : 'Endereço: ainda não informado';
+
+    const baseMessage = Gomez.orderMessage(
+      Gomez.cart(),
+      {},
+      shipping
+    );
+
+    wa.href = Gomez.whatsappUrl(
+      `${baseMessage}\n\n*ENDEREÇO DE ENTREGA*\n${addressText}`
+    );
+  }
+
   function render(){
     const items = Gomez.itemsDetailed();
 
@@ -120,6 +195,29 @@ document.addEventListener('DOMContentLoaded', () => {
             </p>
           </div>
 
+          <div class="delivery-form" id="customerContactForm" style="margin-top:16px">
+            <h3>3. Seu contato</h3>
+            <p>
+              Informe seu WhatsApp para que possamos entrar em contato
+              sobre o andamento do pedido e a entrega.
+            </p>
+
+            <label for="customerWhatsapp">WhatsApp com DDD *</label>
+            <input class="input"
+              id="customerWhatsapp"
+              type="tel"
+              inputmode="numeric"
+              autocomplete="tel"
+              maxlength="16"
+              placeholder="(61) 99999-9999"
+              required>
+
+            <p class="small">
+              Utilizaremos esse número para comunicações relacionadas
+              à sua compra.
+            </p>
+          </div>
+
           <div class="total-line total">
             <span>Total</span>
             <strong id="cartTotal">${Gomez.money(Gomez.productTotal())}</strong>
@@ -187,71 +285,63 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       cep.value = value;
 
-      // Se o CEP mudar, o endereço e o frete anteriores deixam de valer.
       shipping = null;
       cepAddress = null;
       document.querySelector('#deliveryForm').hidden = true;
       document.querySelector('#cartShippingResults').innerHTML = '';
       document.querySelector('#cartTotal').textContent =
         Gomez.money(Gomez.productTotal());
+
+      updateWhatsAppLink();
     });
 
     shipButton.addEventListener('click', () => quoteShipping(cep.value));
-    document.querySelector('#checkoutBtn').addEventListener('click', checkout);
 
-const wa = document.querySelector('#waBtn');
+    document.querySelector('#checkoutBtn')
+      .addEventListener('click', checkout);
 
-function updateWhatsAppLink(){
-  const number = document.querySelector('#deliveryNumber')?.value.trim() || '';
-  const complement = document.querySelector('#deliveryComplement')?.value.trim() || '';
+    const whatsappInput = document.querySelector('#customerWhatsapp');
 
-  const addressText = cepAddress
-    ? [
-        `CEP: ${cepAddress.postal_code}`,
-        `Endereço: ${cepAddress.street || 'Não informado'}, nº ${number || 'não informado'}`,
-        complement ? `Complemento: ${complement}` : '',
-        `Bairro: ${cepAddress.district || 'Não informado'}`,
-        `Cidade/UF: ${cepAddress.city || 'Não informada'}/${cepAddress.state || ''}`
-      ].filter(Boolean).join('\n')
-    : 'Endereço: ainda não informado';
+    whatsappInput.addEventListener('input', () => {
+      whatsappInput.value = formatWhatsApp(whatsappInput.value);
+      updateWhatsAppLink();
+    });
 
-  const baseMessage = Gomez.orderMessage(
-    Gomez.cart(),
-    {},
-    shipping
-  );
+    document.querySelector('#deliveryNumber')
+      .addEventListener('input', updateWhatsAppLink);
 
-  const message = `${baseMessage}\n\n*ENDEREÇO DE ENTREGA*\n${addressText}`;
+    document.querySelector('#deliveryComplement')
+      .addEventListener('input', updateWhatsAppLink);
 
-  wa.href = Gomez.whatsappUrl(message);
-}
+    const wa = document.querySelector('#waBtn');
 
-wa.addEventListener('click', (event) => {
-  updateWhatsAppLink();
+    wa.addEventListener('click', (event) => {
+      updateWhatsAppLink();
 
-  if(!cepAddress){
-    event.preventDefault();
-    alert('Informe o CEP e clique em Calcular frete antes de finalizar pelo WhatsApp.');
-    return;
-  }
+      if(!cepAddress){
+        event.preventDefault();
+        alert('Informe o CEP e clique em Calcular frete antes de finalizar pelo WhatsApp.');
+        return;
+      }
 
-  const number = document.querySelector('#deliveryNumber').value.trim();
+      const number = document.querySelector('#deliveryNumber').value.trim();
 
-  if(!number){
-    event.preventDefault();
-    alert('Informe o número da residência antes de finalizar pelo WhatsApp.');
-    document.querySelector('#deliveryNumber').focus();
-    return;
-  }
-});
+      if(!number){
+        event.preventDefault();
+        alert('Informe o número da residência antes de finalizar pelo WhatsApp.');
+        document.querySelector('#deliveryNumber').focus();
+        return;
+      }
 
-document.querySelector('#deliveryNumber')
-  .addEventListener('input', updateWhatsAppLink);
+      if(!validateWhatsApp()){
+        event.preventDefault();
+        return;
+      }
 
-document.querySelector('#deliveryComplement')
-  .addEventListener('input', updateWhatsAppLink);
+      updateWhatsAppLink();
+    });
 
-updateWhatsAppLink();
+    updateWhatsAppLink();
   }
 
   async function quoteShipping(cepRaw){
@@ -273,10 +363,10 @@ updateWhatsAppLink();
     shipButton.textContent = 'Aguarde...';
 
     try{
-      // 1. Consulta o endereço pelo CEP.
       const cepResponse = await fetch(
         `https://viacep.com.br/ws/${cep}/json/`
       );
+
       if(!cepResponse.ok){
         throw new Error('Não foi possível consultar o CEP.');
       }
@@ -295,7 +385,6 @@ updateWhatsAppLink();
         postal_code: cep
       };
 
-      // Mostra o endereço consultado e pede apenas número e complemento.
       const addressParts = [
         cepAddress.street,
         cepAddress.district,
@@ -310,7 +399,6 @@ updateWhatsAppLink();
 
       deliveryForm.hidden = false;
 
-      // 2. Calcula o frete para o mesmo CEP.
       const response = await fetch('/api/shipping', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -321,6 +409,7 @@ updateWhatsAppLink();
       });
 
       const data = await response.json();
+
       if(!response.ok){
         throw new Error(data.error || 'Não foi possível calcular o frete.');
       }
@@ -353,42 +442,24 @@ updateWhatsAppLink();
           document.querySelector('#cartTotal').textContent =
             Gomez.money(Gomez.productTotal() + Number(shipping.price || 0));
 
-const wa = document.querySelector('#waBtn');
-const number = document.querySelector('#deliveryNumber').value.trim();
-const complement = document.querySelector('#deliveryComplement').value.trim();
-
-const addressText = cepAddress
-  ? [
-      `CEP: ${cepAddress.postal_code}`,
-      `Endereço: ${cepAddress.street || 'Não informado'}, nº ${number || 'não informado'}`,
-      complement ? `Complemento: ${complement}` : '',
-      `Bairro: ${cepAddress.district || 'Não informado'}`,
-      `Cidade/UF: ${cepAddress.city || 'Não informada'}/${cepAddress.state || ''}`
-    ].filter(Boolean).join('\n')
-  : 'Endereço: ainda não informado';
-
-const baseMessage = Gomez.orderMessage(
-  Gomez.cart(),
-  {},
-  shipping
-);
-
-wa.href = Gomez.whatsappUrl(
-  `${baseMessage}\n\n*ENDEREÇO DE ENTREGA*\n${addressText}`
-);
-
           out.querySelectorAll('[data-ship-index]').forEach(optionButton => {
             optionButton.style.outline = 'none';
           });
 
           button.style.outline = '2px solid #c79b32';
+
+          updateWhatsAppLink();
         });
       });
+
+      updateWhatsAppLink();
+
     }catch(error){
       cepAddress = null;
       shipping = null;
       deliveryForm.hidden = true;
       out.innerHTML = `<div class="notice">${Gomez.escape(error.message)}</div>`;
+      updateWhatsAppLink();
     }finally{
       shipButton.disabled = false;
       shipButton.textContent = 'Calcular frete';
@@ -409,7 +480,6 @@ wa.href = Gomez.whatsappUrl(
     }
 
     const number = document.querySelector('#deliveryNumber').value.trim();
-    const complement = document.querySelector('#deliveryComplement').value.trim();
 
     if(!number){
       alert('Informe o número da residência para continuar.');
@@ -417,18 +487,13 @@ wa.href = Gomez.whatsappUrl(
       return;
     }
 
-    // A variável é criada aqui, dentro da função de checkout,
-    // usando o endereço consultado e os dados digitados pelo cliente.
-    const deliveryAddress = {
-      recipient: '',
-      street: cepAddress.street,
-      number,
-      complement,
-      district: cepAddress.district,
-      city: cepAddress.city,
-      state: cepAddress.state,
-      postal_code: cepAddress.postal_code
-    };
+    if(!validateWhatsApp()){
+      return;
+    }
+
+    const customerWhatsapp = getWhatsApp();
+
+    const deliveryAddress = getDeliveryAddress();
 
     try{
       const auth = await ensureGomezAuth();
@@ -467,6 +532,7 @@ wa.href = Gomez.whatsappUrl(
         body: JSON.stringify({
           cart: Gomez.cart(),
           deliveryAddress,
+          customerWhatsapp,
           shipping: shipping ? {
             price: Number(shipping.price || 0),
             name: shipping.name,
@@ -477,6 +543,7 @@ wa.href = Gomez.whatsappUrl(
       });
 
       const data = await response.json();
+
       if(!response.ok){
         throw new Error(data.error || 'Não foi possível iniciar o pagamento.');
       }
@@ -487,9 +554,11 @@ wa.href = Gomez.whatsappUrl(
       }));
 
       location.href = data.init_point;
+
     }catch(error){
       btn.disabled = false;
       btn.textContent = 'Finalizar compra pelo site';
+
       alert(
         `${error.message}\n\nVocê também pode finalizar pelo WhatsApp usando o botão abaixo.`
       );
