@@ -294,6 +294,7 @@ if (/^\d{10,11}$/.test(whatsappDigits)) {
           postal_code: String(address.postal_code)
         },
         customer_email: user.email || null,
+        customer_whatsapp: customerWhatsapp,
         status: 'awaiting_payment',
         payment_status: 'created',
         fulfillment_status: 'not_started',
