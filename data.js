@@ -27,7 +27,7 @@ window.PRODUCTS = [
     category: 'Solar',
     price: 1198.00,
     compareAt: 1290.00,
-    stock: 1,
+    stock: 0,
     badge: 'Destaque',
     image: 'assets/produtos/orient-1519-frente1.jpg',
     gallery: ['assets/produtos/orient-1519-frente1.jpg',
