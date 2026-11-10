@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 :root{
   --gold:#c79b32;
@@ -502,4 +502,50 @@ footer img{display:none!important}
 
 .instagram-link:hover {
   opacity: 0.8;
+}
+
+/* ========================================
+   IDENTIDADE TIPOGRÁFICA — GOMEZ RELÓGIOS
+======================================== */
+
+/* Fonte padrão do site */
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Títulos principais */
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+}
+
+/* Subtítulos e títulos de seção */
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  line-height: 1.25;
+}
+
+/* Títulos menores */
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* Textos e elementos de navegação */
+p,
+a,
+button,
+input,
+textarea,
+select,
+label {
+  font-family: 'Montserrat', sans-serif;
 }
