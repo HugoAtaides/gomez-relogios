@@ -1,4 +1,6 @@
 
+import { normalizeShippingCart, verifyShippingQuoteToken } from './shipping-quote.js';
+
 // GOMEZ RELÓGIOS — POST /api/checkout
 // Requer no Cloudflare:
 // MP_ACCESS_TOKEN
@@ -221,31 +223,27 @@ if (/^\d{10,11}$/.test(whatsappDigits)) {
       }, 400);
     }
 
-    const cart = Array.isArray(body.cart) ? body.cart : [];
-
-    if(!cart.length){
-      return json({ error: 'Carrinho vazio.' }, 400);
+    let normalizedCart;
+    try {
+      normalizedCart = normalizeShippingCart(body.cart);
+    } catch (error) {
+      return json({ error: error.message || 'Carrinho inválido.' }, 400);
     }
 
     const items = [];
 
-    for(const raw of cart){
-      const id = String(raw?.id || '');
+    for(const raw of normalizedCart){
+      const id = raw.id;
       const product = catalog[id];
 
       if(!product){
         return json({ error: 'Produto não reconhecido.' }, 400);
       }
 
-      const quantity = Math.max(
-        1,
-        Math.min(10, Math.floor(Number(raw?.qty || 1)))
-      );
-
       items.push({
         id,
         title: product.title,
-        quantity,
+        quantity: raw.qty,
         unit_price: product.price,
         currency_id: 'BRL'
       });
@@ -256,12 +254,23 @@ if (/^\d{10,11}$/.test(whatsappDigits)) {
       0
     );
 
-    const shippingPayload =
-      body.shipping && Number(body.shipping.price) >= 0
-        ? body.shipping
-        : null;
+    // O navegador envia somente o token assinado da cotação.
+    // O valor do frete é recuperado e validado exclusivamente no backend.
+    let shippingPayload;
+    try {
+      shippingPayload = await verifyShippingQuoteToken({
+        env,
+        token: body.shippingQuoteToken,
+        postalCode: String(address.postal_code),
+        cart: normalizedCart
+      });
+    } catch (error) {
+      return json({
+        error: error.message || 'Cotação de frete inválida. Calcule o frete novamente.'
+      }, 400);
+    }
 
-    const shippingCost = Number(shippingPayload?.price || 0);
+    const shippingCost = shippingPayload.price;
     const total = Number((subtotal + shippingCost).toFixed(2));
 
     if(!Number.isFinite(total) || total <= 0){
