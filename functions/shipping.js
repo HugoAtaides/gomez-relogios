@@ -1,3 +1,5 @@
+import { normalizeShippingCart, createShippingQuoteToken } from './shipping-quote.js';
+
 // GOMEZ RELÓGIOS — POST /api/shipping
 //
 // Cotação de frete via Melhor Envio.
@@ -209,7 +211,12 @@ export async function onRequestPost({ request, env }) {
     const body = await request.json().catch(() => ({}));
     const originCep = digits(env.GOMEZ_ORIGIN_CEP || '');
     const destinationCep = digits(body.postalCode || '');
-    const cart = Array.isArray(body.cart) ? body.cart : [];
+    let cart;
+    try {
+      cart = normalizeShippingCart(body.cart);
+    } catch (error) {
+      return json({ error: error.message || 'Carrinho inválido.' }, 400);
+    }
 
     if (originCep.length !== 8) {
       return json({
@@ -231,10 +238,10 @@ export async function onRequestPost({ request, env }) {
       shipment
     });
 
-    const options = services
-      .filter(item => item && Number.isFinite(Number(item.price)))
+    const rawOptions = services
+      .filter(item => item && item.id != null && Number.isFinite(Number(item.custom_price ?? item.price)))
       .map(item => ({
-        id: item.id,
+        id: String(item.id),
         name: item.name || item.company?.name || 'Transportadora',
         company: item.company?.name || '',
         price: money(item.custom_price ?? item.price),
@@ -245,11 +252,21 @@ export async function onRequestPost({ request, env }) {
       .sort((a, b) => a.price - b.price)
       .slice(0, 10);
 
-    if (!options.length) {
+    if (!rawOptions.length) {
       return json({
         error: 'O Melhor Envio não encontrou uma modalidade para este CEP e pacote.'
       }, 422);
     }
+
+    const options = await Promise.all(rawOptions.map(async option => ({
+      ...option,
+      quote_token: await createShippingQuoteToken({
+        env,
+        postalCode: destinationCep,
+        cart,
+        option
+      })
+    })));
 
     return json({
       provider: 'Melhor Envio',
