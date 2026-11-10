@@ -43,7 +43,7 @@ window.PRODUCTS = [
       'Tecnologia': 'Analógico',
       'Movimento': 'Quartzo',
       'Resistência à água': '30m',
-      'Garantia': 'Garantia conforme condições do produto'
+      'Garantia': '90 dias de garantia legal e 12 meses de garantia de fábrica, devendo ser feito o registro do produto no site indicado pela marca'
     },
     shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
   },
@@ -72,7 +72,7 @@ window.PRODUCTS = [
       'Tecnologia': 'Solartech',
       'Movimento': 'Quartzo solar',
       'Resistência à água': '100m',
-      'Garantia': 'Garantia conforme condições do produto'
+      'Garantia': '90 dias de garantia legal e 12 meses de garantia de fábrica, devendo ser feito o registro do produto no site indicado pela marca'
     },
     shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
   },
@@ -214,7 +214,7 @@ window.PRODUCTS = [
       'Tecnologia': 'Mecânico',
       'Movimento': 'Automático',
       'Resistência à água': '30m',
-      'Garantia': 'Garantia conforme condições do produto'
+      'Garantia': '90 dias de garantia legal'
     },
     shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
   }
