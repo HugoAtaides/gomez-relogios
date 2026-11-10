@@ -103,7 +103,7 @@ window.PRODUCTS = [
       'Tecnologia': 'Analógico',
       'Movimento': 'Quartzo',
       'Resistência à água': '50m',
-      'Garantia': 'Garantia conforme condições do produto'
+      'Garantia': '12 meses de garantia de fábrica'
     },
     shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
   },
@@ -158,7 +158,7 @@ window.PRODUCTS = [
       'Tecnologia': 'Mecânico',
       'Movimento': 'Automático',
       'Resistência à água': '100m',
-      'Garantia': 'Garantia conforme condições do produto'
+      'Garantia': '12 meses de garantia de fábrica'
     },
     shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
   },
