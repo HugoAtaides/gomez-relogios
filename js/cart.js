@@ -533,12 +533,9 @@ document.addEventListener('DOMContentLoaded', () => {
           cart: Gomez.cart(),
           deliveryAddress,
           customerWhatsapp,
-          shipping: shipping ? {
-            price: Number(shipping.price || 0),
-            name: shipping.name,
-            delivery_time: Number(shipping.delivery_time || 0),
-            id: shipping.id || shipping.service || null
-          } : null
+          // O servidor valida a assinatura e recupera o preço original.
+          // Não enviar preço, nome ou prazo como dados confiáveis do navegador.
+          shippingQuoteToken: shipping?.quote_token || null
         })
       });
 
