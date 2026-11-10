@@ -21,33 +21,6 @@ window.GOMEZ_CONFIG = {
 // As fotos podem ser colocadas em /assets/produtos/ e referenciadas em image.
 window.PRODUCTS = [
   {
-    id: 'orient-mbss-1519-g1sx',
-    brand: 'Orient',
-    name: ' Orient Solartech Elite Sea MBSS 1519 G1SX',
-    category: 'Solar',
-    price: 1198.00,
-    compareAt: 1290.00,
-    stock: 0,
-    badge: 'Destaque',
-    image: 'assets/produtos/orient-1519-frente1.jpg',
-    gallery: ['assets/produtos/orient-1519-frente1.jpg',
-              'assets/produtos/orient-1519-frente2.jpg',
-              'assets/produtos/orient-1519-frente3.jpg',
-              'assets/produtos/orient-1519-frente4.jpg',
-              'assets/produtos/orient-1519-frente5.jpg'],
-    description: 'Relógio Orient com tecnologia Solartech e proposta esportiva elegante, pensado para quem quer praticidade sem abrir mão de presença.',
-    specs: {
-      'Marca': 'Orient',
-      'Modelo': 'MBSS 1519 G1SX',
-      'Diâmetro da caixa': '40 mm',
-      'Tecnologia': 'Solartech',
-      'Movimento': 'Quartzo solar',
-      'Resistência à água': '100m',
-      'Garantia': 'Garantia conforme condições do produto'
-    },
-    shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
-  },
-  {
     id: 'orient-eternal-mgss1269-g1kx',
     brand: 'Orient',
     name: 'Orient Eternal MGSS1269 G1KX',
