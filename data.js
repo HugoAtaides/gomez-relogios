@@ -162,7 +162,7 @@ window.PRODUCTS = [
     },
     shipping: { weight: 0.6, width: 12, height: 8, length: 18 }
   },
-  {
+//  {
     id: 'mondaine-m1-33055gpmvrc3',
     brand: 'Mondaine',
     name: 'Mondaine M1 33055GPMVRC3',
